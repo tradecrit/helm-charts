@@ -4,16 +4,14 @@ metadata:
   name: {{ include "webserver.fullname" . }}
 spec:
   parentRefs:
-    - name: "gateway"
-      sectionName:  "https-listener-wildcard"
-      namespace: "istio-ingress"
+    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
   hostnames:
-    - "quote.development.tradecrit.com"
+    {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
   rules:
     - matches:
         - path:
-            type:
-            value: /
+            type: {{ .Values.httpRoute.path.type }}
+            value: {{ .Values.httpRoute.path.value }}
       backendRefs:
         - name:  {{ include "webserver.fullname" . }}
           port: {{ .Values.service.port }}

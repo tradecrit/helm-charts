@@ -1,9 +1,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: docker.io/datawire/quote
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "0.5.0"
+  containerPort: 8080
 
 imagePullSecrets: []
 nameOverride: ""
@@ -11,7 +12,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Automatically mount a ServiceAccount's API credentials?
   automount: true
   # Annotations to add to the service account
@@ -31,16 +32,28 @@ service:
   port: 80
 
 httpRoute:
+  parentRefs:
+    - name: "gateway"
+      sectionName:  "https-listener-wildcard"
+      namespace: "istio-ingress"
+  hostnames: ["quote.development.tradecrit.com"]
   path:
     type: PathPrefix
     value: /
 
-resources: {}
+resources:
+  limits:
+      cpu: 100m
+      memory: 128Mi
+  requests:
+      cpu: 100m
+      memory: 128Mi
 
 livenessProbe:
   httpGet:
     path: /
     port: http
+
 readinessProbe:
   httpGet:
     path: /
