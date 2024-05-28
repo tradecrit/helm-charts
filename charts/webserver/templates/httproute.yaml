@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "webserver.fullname" . }}
+spec:
+  parentRefs:
+    - name: "gateway"
+      sectionName:  "https-listener-wildcard"
+      namespace: "istio-ingress"
+  hostnames:
+    - "quote.development.tradecrit.com"
+  rules:
+    - matches:
+        - path:
+            type:
+            value: /
+      backendRefs:
+        - name:  {{ include "webserver.fullname" . }}
+          port: {{ .Values.service.port }}
