@@ -1,3 +1,6 @@
+nameOverride: ""
+fullnameOverride: ""
+
 replicaCount: 1
 
 image:
@@ -6,9 +9,7 @@ image:
   tag: "0.5.0"
   containerPort: 8080
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+imagePullSecrets: {}
 
 serviceAccount:
   # Specifies whether a service account should be created
