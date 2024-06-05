@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "webserver.name" -}}
+{{- define "tradecrit-external-secrets.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "webserver.fullname" -}}
+{{- define "tradecrit-external-secrets.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "webserver.chart" -}}
+{{- define "tradecrit-external-secrets.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "webserver.labels" -}}
-helm.sh/chart: {{ include "webserver.chart" . }}
-{{ include "webserver.selectorLabels" . }}
+{{- define "tradecrit-external-secrets.labels" -}}
+helm.sh/chart: {{ include "tradecrit-external-secrets.chart" . }}
+{{ include "tradecrit-external-secrets.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,14 +45,18 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "webserver.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "webserver.name" . }}
+{{- define "tradecrit-external-secrets.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "tradecrit-external-secrets.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "webserver.serviceAccountName" -}}
-{{- default (include "webserver.fullname" .) .Values.serviceAccount.name }}
+{{- define "tradecrit-external-secrets.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "tradecrit-external-secrets.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
 {{- end }}

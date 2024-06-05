@@ -1,0 +1,10 @@
+fullnameOverride: "external-secrets"
+
+backend:
+  vault:
+    name: "vault-backend"
+    address: "http://vault.vault:8200"
+    token: "changeme"
+
+external-secrets:
+  installCRDs: False

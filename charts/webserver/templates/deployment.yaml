@@ -13,8 +13,12 @@ spec:
       {{- include "webserver.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: {{ include "webserver.serviceAccountName" . }}
+        # Rendered to  /vault/secrets/<name>
+        vault.hashicorp.com/agent-inject-secret-{{ include "webserver.fullname" . }}: "secrets/{{ include "webserver.fullname" . }}"
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
