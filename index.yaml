@@ -3,6 +3,20 @@ entries:
   tradecrit-external-secrets:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-06-08T17:55:23.050105421Z"
+    dependencies:
+    - name: external-secrets
+      repository: https://charts.external-secrets.io
+      version: 0.9.19
+    description: A Helm chart for Kubernetes
+    digest: 0ce1c5ecbf01edda86f683f9c1e63b481ff95e28214cd73578eaf3c26d0ae425
+    name: tradecrit-external-secrets
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/tradecrit-external-secrets-0.1.2/tradecrit-external-secrets-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-06-05T20:12:51.004435176Z"
     dependencies:
     - name: external-secrets
@@ -56,4 +70,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/webserver-0.1.1/webserver-0.1.1.tgz
     version: 0.1.1
-generated: "2024-06-05T20:12:51.004449502Z"
+generated: "2024-06-08T17:55:23.05012594Z"
