@@ -11,6 +11,8 @@ spec:
   template:
     metadata:
       annotations:
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-inject-secret-webserver: {{ include "webserver.fullname" . }}
         {{- with .Values.deployment.annotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

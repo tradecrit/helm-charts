@@ -3,7 +3,10 @@ fullnameOverride: ""
 
 httpRoute:
   enabled: true
-  parentRefs: []
+  parentRefs:
+    - name: "api-gateway"
+      sectionName: "wildcard-tls"
+      namespace: "consul"
   hostnames: []
   path:
     type: PathPrefix
@@ -24,7 +27,6 @@ serviceAccount:
 deployment:
   annotations:
     vault.hashicorp.com/agent-inject: "true"
-    vault.hashicorp.com/role: "default"
     consul.hashicorp.com/connect-inject: "true"
     consul.hashicorp.com/transparent-proxy: 'true'
 
