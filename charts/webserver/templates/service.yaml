@@ -2,14 +2,16 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "webserver.fullname" . }}
+  annotations:
+    {{- toYaml .Values.service.annotations | nindent 4}}
   labels:
-    {{- include "webserver.labels" . | nindent 4 }}
+    {{- toYaml .Values.service.labels | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+      targetPort: {{ .Values.deployment.image.containerPort }}
+      protocol: {{ .Values.service.protocol }}
+      name: {{ .Values.service.protocol }}
   selector:
     {{- include "webserver.selectorLabels" . | nindent 4 }}

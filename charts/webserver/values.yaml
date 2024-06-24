@@ -1,81 +1,77 @@
 nameOverride: ""
 fullnameOverride: ""
 
-replicaCount: 1
-
-image:
-  repository: docker.io/datawire/quote
-  pullPolicy: IfNotPresent
-  tag: "0.5.0"
-  containerPort: 8080
-
-imagePullSecrets: {}
-
-configMap:
-  env: {}
-
-serviceAccount:
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-podAnnotations: {}
-podLabels: {}
-podSecurityContext: {}
-
-securityContext: {}
-
-service:
-  type: ClusterIP
-  port: 80
-
 httpRoute:
-  parentRefs:
-    - name: "gateway"
-      sectionName:  "https-listener-wildcard"
-      namespace: "istio-ingress"
-  hostnames: ["quote.development.tradecrit.com"]
+  enabled: true
+  parentRefs: []
+  hostnames: []
   path:
     type: PathPrefix
     value: /
 
-resources:
-  limits:
-      cpu: 100m
-      memory: 128Mi
-  requests:
-      cpu: 100m
-      memory: 128Mi
+service:
+  type: ClusterIP
+  protocol: TCP
+  port: 8080
+  annotations: {}
+  labels: {}
 
-livenessProbe:
-  httpGet:
-    path: /health
-    port: http
-  initialDelaySeconds: 60
+serviceAccount:
+  automount: true
+  annotations: {}
+  name: ""
 
-readinessProbe:
-  httpGet:
-    path: /health
-    port: http
-  initialDelaySeconds: 60
+deployment:
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "default"
+    consul.hashicorp.com/connect-inject: "true"
+    consul.hashicorp.com/transparent-proxy: 'true'
 
-autoscaling:
-  enabled: true
-  minReplicas: 1
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
+  labels: {}
 
-volumes: []
+  image:
+    repository: docker.io/datawire/quote
+    pullPolicy: IfNotPresent
+    tag: "0.5.0"
+    imagePullSecrets: { }
+    ports:
+      - name: http
+        containerPort: 8080
+        protocol: TCP
 
-volumeMounts: []
+  volumes: [ ]
+  volumeMounts: [ ]
+  securityContext: { }
+  tolerations: [ ]
+  env: { }
 
-nodeSelector: {}
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
 
-tolerations: []
+  resources:
+    limits:
+        cpu: 100m
+        memory: 128Mi
+    requests:
+        cpu: 100m
+        memory: 128Mi
 
-affinity: {}
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 10
+
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 10
+
+
+

@@ -5,75 +5,56 @@ metadata:
   labels:
     {{- include "webserver.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "webserver.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: {{ include "webserver.serviceAccountName" . }}
-        # Rendered to  /vault/secrets/<name>
-        vault.hashicorp.com/agent-inject-secret-{{ include "webserver.fullname" . }}: "secrets/{{ include "webserver.fullname" . }}"
-      {{- with .Values.podAnnotations }}
+        {{- with .Values.deployment.annotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "webserver.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
+        {{- with .Values.deployment.labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.deployment.image.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "webserver.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.deployment.securityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.deployment.securityContext | nindent 12 }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy | default "IfNotPresent" }}
           envFrom:
             - configMapRef:
                 name: {{ include "webserver.fullname" . }}-environment
-            {{- if .Values.secretName }}
-            - secretRef:
-                name: {{ .Values.secretName }}
-            {{- end }}
           ports:
-            - name: http
-              containerPort: {{ .Values.image.containerPort }}
-              protocol: TCP
+          {{- with .Values.deployment.image.ports }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            {{- toYaml .Values.deployment.livenessProbe | nindent 12 }}
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.deployment.readinessProbe | nindent 12 }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          {{- with .Values.deployment.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- with .Values.volumes }}
+      {{- with .Values.deployment.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.deployment.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
