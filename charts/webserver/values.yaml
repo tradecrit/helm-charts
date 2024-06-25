@@ -3,10 +3,7 @@ fullnameOverride: ""
 
 httpRoute:
   enabled: true
-  parentRefs:
-    - name: "api-gateway"
-      sectionName: "wildcard-tls"
-      namespace: "consul"
+  parentRefs: []
   hostnames: []
   path:
     type: PathPrefix
@@ -37,10 +34,6 @@ deployment:
     pullPolicy: IfNotPresent
     tag: "0.5.0"
     imagePullSecrets: { }
-    ports:
-      - name: http
-        containerPort: 8080
-        protocol: TCP
 
   volumes: [ ]
   volumeMounts: [ ]
@@ -74,6 +67,3 @@ deployment:
       path: /health
       port: http
     initialDelaySeconds: 10
-
-
-

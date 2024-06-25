@@ -1,12 +1,15 @@
-apiVersion: gateway.networking.k8s.io/v1
+{{- if .Values.httpRoute.enabled -}}
+{{- $parentRefs := .Values.httpRoute.parentRefs }}
+{{- $hostnames := .Values.httpRoute.hostnames }}
+apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
   name: {{ include "webserver.fullname" . }}
 spec:
   parentRefs:
-    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
+    {{- toYaml $parentRefs | nindent 4 }}
   hostnames:
-    {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
+    {{- toYaml $hostnames | nindent 4 }}
   rules:
     - matches:
         - path:
@@ -15,3 +18,4 @@ spec:
       backendRefs:
         - name:  {{ include "webserver.fullname" . }}
           port: {{ .Values.service.port }}
+{{- end -}}

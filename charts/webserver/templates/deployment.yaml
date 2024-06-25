@@ -11,8 +11,6 @@ spec:
   template:
     metadata:
       annotations:
-        vault.hashicorp.com/agent-init-first: "true"
-        vault.hashicorp.com/agent-inject-secret-webserver: {{ include "webserver.fullname" . }}
         {{- with .Values.deployment.annotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -39,9 +37,9 @@ spec:
             - configMapRef:
                 name: {{ include "webserver.fullname" . }}-environment
           ports:
-          {{- with .Values.deployment.image.ports }}
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
           livenessProbe:
             {{- toYaml .Values.deployment.livenessProbe | nindent 12 }}
           readinessProbe:
