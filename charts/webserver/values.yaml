@@ -3,8 +3,9 @@ fullnameOverride: ""
 
 httpRoute:
   enabled: true
+  subdomain: "api"
+  environment: "development"
   parentRefs: []
-  hostnames: []
   path:
     type: PathPrefix
     value: /
@@ -24,8 +25,6 @@ serviceAccount:
 deployment:
   annotations:
     vault.hashicorp.com/agent-inject: "true"
-    consul.hashicorp.com/connect-inject: "true"
-    consul.hashicorp.com/transparent-proxy: 'true'
 
   labels: {}
 

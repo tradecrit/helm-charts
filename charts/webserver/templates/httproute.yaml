@@ -1,6 +1,5 @@
 {{- if .Values.httpRoute.enabled -}}
 {{- $parentRefs := .Values.httpRoute.parentRefs }}
-{{- $hostnames := .Values.httpRoute.hostnames }}
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
@@ -9,7 +8,7 @@ spec:
   parentRefs:
     {{- toYaml $parentRefs | nindent 4 }}
   hostnames:
-    {{- toYaml $hostnames | nindent 4 }}
+    - "{{ .Values.httpRoute.subdomain }}.{{ .Values.httpRoute.environment }}.tradecrit.com"
   rules:
     - matches:
         - path:
