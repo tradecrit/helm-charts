@@ -32,6 +32,16 @@ entries:
   webserver:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-07-03T20:14:43.88124347Z"
+    description: A Helm chart for Kubernetes
+    digest: f68e52f202086db0c19d3c5389adb6441c500447db657f213ab3920b28c77219
+    name: webserver
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/webserver-0.1.9/webserver-0.1.9.tgz
+    version: 0.1.9
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-06-28T20:49:16.181414543Z"
     description: A Helm chart for Kubernetes
     digest: 5c2896ade3564f11646e79252ceebe937ba32a8943c5b6e65d93a71e1478716f
@@ -110,4 +120,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/webserver-0.1.1/webserver-0.1.1.tgz
     version: 0.1.1
-generated: "2024-06-28T20:49:16.181447525Z"
+generated: "2024-07-03T20:14:43.881292853Z"
