@@ -15,11 +15,9 @@ spec:
             type: {{ .Values.httpRoute.path.type }}
             value: {{ .Values.httpRoute.path.value }}
       filters:
-        - type: URLRewrite
-          urlRewrite:
-            path:
-              type: ReplacePrefixMatch
-              replacePrefixMatch: /
+        {{ if .Values.httpRoute.filters }}
+        {{- toYaml .Values.httpRoute.filters | nindent 8 }}
+        {{- end }}
       backendRefs:
         - name:  {{ include "webserver.fullname" . }}
           port: {{ .Values.service.port }}

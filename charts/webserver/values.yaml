@@ -6,8 +6,9 @@ httpRoute:
   subdomain: "api"
   environment: "development"
   parentRefs: []
+  filters: []
   path:
-    type: PathPrefix
+    type: Path
     value: /
 
 service:
