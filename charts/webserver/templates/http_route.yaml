@@ -1,0 +1,27 @@
+---
+{{- if .Values.httpRoute.enabled -}}
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: {{ include "webserver.fullname" . }}
+spec:
+  parentRefs:
+    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
+  hostnames:
+    - "{{ .Values.httpRoute.subdomain }}.{{ .Values.httpRoute.environment }}.{{ .Values.httpRoute.domain }}"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ .Values.httpRoute.pathPrefix | quote}}
+      backendRefs:
+        - name: {{ include "webserver.fullname" . }}
+          port: {{ .Values.service.port }}
+          weight: 100
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: {{ .Values.httpRoute.replacePrefixMatch | quote}}
+{{- end -}}

@@ -3,13 +3,16 @@ fullnameOverride: ""
 
 httpRoute:
   enabled: true
-  subdomain: "api"
+  subdomain: "auth"
   environment: "development"
-  parentRefs: []
-  filters: []
-  path:
-    type: Path
-    value: /
+  domain: "tradecrit.com"
+  referenceGrants: []
+  parentRefs:
+    - name: "api-gateway"
+      sectionName: "tls"
+      namespace: "istio-gateway"
+  pathPrefix: "/"
+  replacePrefixMatch: "/"
 
 service:
   type: ClusterIP
@@ -25,7 +28,13 @@ serviceAccount:
 
 deployment:
   annotations:
-    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/agent-inject: 'true'
+#    vault.hashicorp.com/role: 'web'
+#    vault.hashicorp.com/agent-inject-secret-config: 'secret/data/web'
+#    vault.hashicorp.com/agent-inject-template-config: |
+#      {{- with secret "secret/data/web" -}}
+#        export api_key="{{ .Data.data.payments_api_key }}"
+#      {{- end }}
 
   labels: {}
 
@@ -36,10 +45,14 @@ deployment:
     imagePullSecrets:
       - name: dockerconfigjson-sync
 
+  args: [ ]
+  command: [ ]
+
   volumes: [ ]
   volumeMounts: [ ]
   securityContext: { }
   tolerations: [ ]
+
   env: { }
 
   autoscaling:
@@ -51,8 +64,8 @@ deployment:
 
   resources:
     limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 250m
+        memory: 256Mi
     requests:
         cpu: 100m
         memory: 128Mi
