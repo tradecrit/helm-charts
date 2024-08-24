@@ -15,28 +15,11 @@ httpRoute:
   pathPrefix: /webserver
   replacePrefixMatch: /webserver
 
-
 deployment:
-  imagePullSecrets: [ ]
-
-  annotations: { }
-
-  labels: { }
-
-  securityContext:
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 1000
-
   image:
     repository: nginx
     pullPolicy: IfNotPresent
     tag: latest
-
-  env: [ ]
 
   resources:
     limits:
@@ -44,17 +27,7 @@ deployment:
       memory: 128Mi
     requests:
       cpu: 100m
-    memory: 128Mi
-
-  livenessProbe:
-    httpGet:
-      path: /healthz
-      port: http
-
-  readinessProbe:
-    httpGet:
-      path: /healthz
-      port: http
+      memory: 128Mi
 
   minReadySeconds: 10
   strategy:
@@ -63,15 +36,17 @@ deployment:
       maxUnavailable: 1
       maxSurge: 1
 
+  livenessProbe: {}
+  readinessProbe: {}
   volumes: [ ]
-
   volumeMounts: [ ]
-
   nodeSelector: { }
-
   tolerations: [ ]
-
   affinity: { }
+  env: [ ]
+  imagePullSecrets: [ ]
+  annotations: { }
+  labels: { }
 
 externalSecrets:
   enabled: true
