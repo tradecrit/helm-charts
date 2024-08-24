@@ -1,13 +1,92 @@
-replicaCount: 1
-
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  tag: ""
-
-imagePullSecrets: [ ]
 nameOverride: ""
 fullnameOverride: ""
+
+replicaCount: 1
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: api-gateway
+  subdomain: webserver
+  environment: development
+  domain: example.com
+  pathPrefix: /webserver
+  replacePrefixMatch: /webserver
+
+
+deployment:
+  imagePullSecrets: [ ]
+
+  annotations: { }
+
+  labels: { }
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  image:
+    repository: nginx
+    pullPolicy: IfNotPresent
+    tag: latest
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+    memory: 128Mi
+
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: http
+
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
+  volumes: [ ]
+
+  volumeMounts: [ ]
+
+  nodeSelector: { }
+
+  tolerations: [ ]
+
+  affinity: { }
+
+externalSecrets:
+  enabled: true
+  resyncInterval: 10
+  authentication:
+    universalAuth:
+      secretsScope:
+        projectSlug: development
+        envSlug: dev
+        secretsPath: "/"
+        recursive: true
+      credentialsRef:
+          secretName: universal-auth-credentials
+          secretNamespace: infisical
+  managedSecretReference:
+    secretName: secret
+    secretType: Opaque
 
 serviceAccount:
   create: true
@@ -15,23 +94,11 @@ serviceAccount:
   annotations: { }
   name: ""
 
-podAnnotations: { }
-podLabels: { }
-
-podSecurityContext:
-  fsGroup: 2000
-
-securityContext:
-  capabilities:
-    drop:
-      - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1000
-
 service:
   type: ClusterIP
   port: 8080
+  targetPort: 8080
+  protocol: TCP
 
 ingress:
   enabled: false
@@ -43,40 +110,12 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: [ ]
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources:
-   limits:
-     cpu: 100m
-     memory: 128Mi
-   requests:
-     cpu: 100m
-   memory: 128Mi
-
-livenessProbe:
-  httpGet:
-    path: /healthz
-    port: http
-readinessProbe:
-  httpGet:
-    path: /healthz
-    port: http
 
 autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-volumes: [ ]
 
-volumeMounts: [ ]
-
-nodeSelector: { }
-
-tolerations: [ ]
-
-affinity: { }
