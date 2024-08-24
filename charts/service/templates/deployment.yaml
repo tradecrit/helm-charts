@@ -34,6 +34,13 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          env:
+            {{- toYaml .Values.deployment.env | nindent 12 }}
+          {{ if .Values.externalSecrets.enabled}}
+          envFrom:
+            - secretRef:
+                name: {{ include "service.fullname" . }}
+          {{ end }}
           ports:
             - name: service
               containerPort: {{ .Values.service.targetPort }}
