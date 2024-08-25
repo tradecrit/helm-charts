@@ -37,7 +37,7 @@ spec:
           {{ if .Values.externalSecrets.enabled}}
           envFrom:
             - secretRef:
-                name: {{ include "service.fullname" . }}
+                name: {{ .Values.externalSecrets.managedSecretReference.secretName }}
           {{ end }}
           ports:
             - name: service

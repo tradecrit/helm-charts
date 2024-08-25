@@ -11,7 +11,7 @@ spec:
       secretsScope:
         projectSlug: development-ko-nv
         envSlug: dev
-        secretsPath: "/DOCKERCONFIGJSON"
+        secretsPath: "/github"
         recursive: false
       credentialsRef:
         secretName: universal-auth-credentials
