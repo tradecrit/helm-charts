@@ -2,7 +2,7 @@
 apiVersion: secrets.infisical.com/v1alpha1
 kind: InfisicalSecret
 metadata:
-  name: dockerconfigjson
+  name: {{ include "service.fullname" . }}-dockerconfigjson
 spec:
   hostAPI: https://app.infisical.com/api
   resyncInterval: 10
@@ -17,7 +17,7 @@ spec:
         secretName: universal-auth-credentials
         secretNamespace: infisical
   managedSecretReference:
-    secretName: dockerconfigjson
-    secretNamespace: dynamic-dns
+    secretName: {{ include "service.fullname" . }}-dockerconfigjson
+    secretNamespace: {{ .Release.Namespace }}
     creationPolicy: "Owner"
     secretType: kubernetes.io/dockerconfigjson
