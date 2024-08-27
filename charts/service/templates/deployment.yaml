@@ -23,10 +23,8 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with .Values.deployment.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: {{ include "service.fullname" . }}-dockerconfigjson
       serviceAccountName: {{ include "service.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
@@ -37,7 +35,7 @@ spec:
           {{ if .Values.externalSecrets.enabled}}
           envFrom:
             - secretRef:
-                name: {{ .Values.externalSecrets.managedSecretReference.secretName }}
+                name: {{ include "service.fullname" . }}-{{ .Values.externalSecrets.managedSecretReference.secretName }}
           {{ end }}
           ports:
             - name: service
