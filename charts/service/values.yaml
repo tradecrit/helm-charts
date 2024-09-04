@@ -4,16 +4,16 @@ fullnameOverride: ""
 replicaCount: 1
 
 httpRoute:
-  enabled: true
+  enabled: false
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: api-gateway
-  subdomain: webserver
+  subdomain: myapp
   environment: development
   domain: example.com
-  pathPrefix: /webserver
-  replacePrefixMatch: /webserver
+  pathPrefix: /
+  replacePrefixMatch: /
 
 deployment:
   image:
@@ -36,8 +36,15 @@ deployment:
       maxUnavailable: 1
       maxSurge: 1
 
-  livenessProbe: {}
-  readinessProbe: {}
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+
   volumes: [ ]
   volumeMounts: [ ]
   nodeSelector: { }
@@ -49,7 +56,7 @@ deployment:
   labels: { }
 
 externalSecrets:
-  enabled: true
+  enabled: false
   resyncInterval: 10
   authentication:
     universalAuth:
@@ -83,5 +90,3 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
-
-
