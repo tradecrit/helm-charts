@@ -10,7 +10,7 @@ spec:
     universalAuth:
       secretsScope:
         projectSlug: development-ko-nv
-        envSlug: dev
+        envSlug: {{ .Values.environment_slug | default "dev" }}
         secretsPath: "/github"
         recursive: false
       credentialsRef:

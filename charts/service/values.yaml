@@ -3,6 +3,9 @@ fullnameOverride: ""
 
 replicaCount: 1
 
+environment_slug: dev
+environment: development
+
 httpRoute:
   enabled: false
   parentRefs:
@@ -36,14 +39,21 @@ deployment:
       maxUnavailable: 1
       maxSurge: 1
 
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+        httpHeaders: []
+      initialDelaySeconds: 3
+      periodSeconds: 3
+
+    readinessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+        httpHeaders: []
+      initialDelaySeconds: 3
+      periodSeconds: 3
 
   volumes: [ ]
   volumeMounts: [ ]
