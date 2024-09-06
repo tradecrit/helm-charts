@@ -11,12 +11,17 @@ httpRoute:
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: api-gateway
+      name: kong
+      namespace: kong
+      sectionName: https
   subdomain: myapp
-  environment: development
+  environment: dev
   domain: example.com
-  pathPrefix: /
-  replacePrefixMatch: /
+  matches:
+    - path: /
+      type: PathPrefix
+      value: /
+  filters: [ ]
 
 deployment:
   image:

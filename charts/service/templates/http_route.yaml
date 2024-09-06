@@ -10,17 +10,11 @@ spec:
     - "{{ .Values.httpRoute.subdomain }}.{{ .Values.httpRoute.environment }}.{{ .Values.httpRoute.domain }}"
   rules:
     - matches:
-        - path:
-            type: PathPrefix
-            value: {{ .Values.httpRoute.pathPrefix | quote}}
+        {{- toYaml .Values.httpRoute.matches | nindent 8 }}
       backendRefs:
         - name: {{ include "service.fullname" . }}
           port: {{ .Values.service.port }}
-          weight: 100
+          weight: 1
       filters:
-        - type: URLRewrite
-          urlRewrite:
-            path:
-              type: ReplacePrefixMatch
-              replacePrefixMatch: {{ .Values.httpRoute.replacePrefixMatch | quote}}
+        {{- toYaml .Values.httpRoute.filters | nindent 8 }}
 {{- end -}}
