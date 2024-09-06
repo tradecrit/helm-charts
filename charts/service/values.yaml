@@ -14,13 +14,11 @@ httpRoute:
       name: kong
       namespace: kong
       sectionName: https
-  subdomain: myapp
-  environment: dev
-  domain: example.com
+  hostname: ""
   matches:
-    - path: /
-      type: PathPrefix
-      value: /
+    - path:
+        type: PathPrefix
+        value: /
   filters: [ ]
 
 deployment:
