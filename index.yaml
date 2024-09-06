@@ -3,6 +3,17 @@ entries:
   service:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-09-06T15:10:19.080685336Z"
+    description: A Helm chart for Kubernetes
+    digest: 2a47025bb905dde70665405a70ebfa83f92d4aeb705475bc003be1d08026e304
+    icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
+    name: service
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/service-0.1.8/service-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-09-06T14:42:02.622524003Z"
     description: A Helm chart for Kubernetes
     digest: d9969ea0da43ffacba6c27fab90c78ede3fcf1540c595bade7c189c067727060
@@ -92,4 +103,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/webserver-0.1.12/webserver-0.1.12.tgz
     version: 0.1.12
-generated: "2024-09-06T14:42:02.622557786Z"
+generated: "2024-09-06T15:10:19.080722887Z"
