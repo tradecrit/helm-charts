@@ -28,7 +28,7 @@ spec:
       serviceAccountName: {{ include "service.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag .Chart.AppVersion }}"
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           env:
             {{- toYaml .Values.deployment.env | nindent 12 }}
