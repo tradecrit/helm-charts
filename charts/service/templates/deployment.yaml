@@ -41,10 +41,18 @@ spec:
             - name: service
               containerPort: {{ .Values.service.targetPort }}
               protocol: {{ .Values.service.protocol }}
+          {{- if .Values.deployment.livenessProbe }}
           livenessProbe:
-            {{- toYaml .Values.deployment.livenessProbe | nindent 12 }}
+          {{- toYaml .Values.deployment.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.deployment.readinessProbe }}
+          {{- end }}
+          {{- if .Values.deployment.readinessProbe }}
           readinessProbe:
-            {{- toYaml .Values.deployment.readinessProbe | nindent 12 }}
+          {{- toYaml .Values.deployment.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- with .Values.deployment.resources.requests }}
+          {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
           {{- with .Values.deployment.volumeMounts }}

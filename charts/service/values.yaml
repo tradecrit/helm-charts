@@ -6,6 +6,20 @@ replicaCount: 1
 environment_slug: dev
 environment: development
 
+grpcRoute:
+  enabled: false
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: kong
+    namespace: kong
+    sectionName: grpc
+  hostname: ""
+  rules:
+  - backendRefs:
+      - name: service
+        port: 50051
+
 httpRoute:
   enabled: false
   parentRefs:
@@ -42,21 +56,9 @@ deployment:
       maxUnavailable: 1
       maxSurge: 1
 
-  livenessProbe:
-    httpGet:
-      path: /healthz
-      port: 8080
-      httpHeaders: []
-    initialDelaySeconds: 5
-    periodSeconds: 5
+  livenessProbe: {}
 
-  readinessProbe:
-    httpGet:
-      path: /healthz
-      port: 8080
-      httpHeaders: []
-    initialDelaySeconds: 5
-    periodSeconds: 5
+  readinessProbe: {}
 
   volumes: [ ]
   volumeMounts: [ ]
@@ -99,7 +101,7 @@ service:
 
 autoscaling:
   enabled: true
-  minReplicas: 3
-  maxReplicas: 10
+  minReplicas: 1
+  maxReplicas: 3
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
