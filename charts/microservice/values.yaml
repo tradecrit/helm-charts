@@ -1,38 +1,20 @@
-nameOverride: ""
-fullnameOverride: ""
+# Default values for microservice.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
 
 replicaCount: 1
-
-environment_slug: dev
-environment: development
-
-grpcRoute:
-  enabled: false
-  parentRefs:
-  - group: gateway.networking.k8s.io
-    kind: Gateway
-    name: kong
-    namespace: kong
-    sectionName: grpc
-  hostname: ""
-  rules:
-  - backendRefs:
-      - name: service
-        port: 50051
 
 httpRoute:
   enabled: false
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: kong
-      namespace: kong
-      sectionName: https
+      name: traefik
+      namespace: traefik
+      sectionName: websecure
   hostname: ""
-  matches:
-    - path:
-        type: PathPrefix
-        value: /
+  rules: []
+  matches: []
   filters: [ ]
 
 deployment:

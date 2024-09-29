@@ -1,0 +1,23 @@
+---
+apiVersion: secrets.infisical.com/v1alpha1
+kind: InfisicalSecret
+metadata:
+  name: {{ include "microservice.fullname" . }}-dockerconfigjson
+spec:
+  hostAPI: https://app.infisical.com/api
+  resyncInterval: 10
+  authentication:
+    universalAuth:
+      secretsScope:
+        projectSlug: development-ko-nv
+        envSlug: {{ .Values.environment_slug | default "dev" }}
+        secretsPath: "/github"
+        recursive: false
+      credentialsRef:
+        secretName: universal-auth-credentials
+        secretNamespace: infisical
+  managedSecretReference:
+    secretName: {{ include "microservice.fullname" . }}-dockerconfigjson
+    secretNamespace: {{ .Release.Namespace }}
+    creationPolicy: "Owner"
+    secretType: kubernetes.io/dockerconfigjson

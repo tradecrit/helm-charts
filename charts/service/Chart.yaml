@@ -1,8 +1,0 @@
-apiVersion: v2
-name: service
-description: A Helm chart for Kubernetes
-icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
-
-type: application
-version: 0.1.9
-appVersion: "1.16.0"

@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "service.fullname" . }}
+  name: {{ include "microservice.fullname" . }}
   labels:
-    {{- include "service.labels" . | nindent 4 }}
+    {{- include "microservice.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "service.selectorLabels" . | nindent 6 }}
+      {{- include "microservice.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.deployment.annotations }}
@@ -18,14 +18,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "service.labels" . | nindent 8 }}
+        {{- include "microservice.labels" . | nindent 8 }}
         {{- with .Values.deployment.labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
       imagePullSecrets:
-        - name: {{ include "service.fullname" . }}-dockerconfigjson
-      serviceAccountName: {{ include "service.serviceAccountName" . }}
+        - name: {{ include "microservice.fullname" . }}-dockerconfigjson
+      serviceAccountName: {{ include "microservice.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
@@ -38,7 +38,7 @@ spec:
                 name: {{ .Values.externalSecrets.managedSecretReference.secretName }}
           {{ end }}
           ports:
-            - name: service
+            - name: microservice
               containerPort: {{ .Values.service.targetPort }}
               protocol: {{ .Values.service.protocol }}
           {{- if .Values.deployment.livenessProbe }}
