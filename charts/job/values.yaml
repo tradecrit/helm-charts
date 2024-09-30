@@ -1,12 +1,15 @@
 schedule: "0 0 * * *"
 
+jobHistoryLimit: 3
+
 args: [ ]
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  repository: ""
+  pullPolicy: "Always"
+  tag: ""
+
+env: [ ]
 
 imagePullSecrets: [ ]
 nameOverride: ""
@@ -29,24 +32,11 @@ resources:
     cpu: 100m
     memory: 128Mi
 
-# Additional volumes on the output Deployment definition.
 volumes: [ ]
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
 
-# Additional volumeMounts on the output Deployment definition.
 volumeMounts: [ ]
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
 
 nodeSelector: { }
-
-tolerations: [ ]
-
-affinity: { }
 
 externalSecrets:
   enabled: false

@@ -6,27 +6,36 @@ metadata:
     {{- include "job.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.schedule }}
+  successfulJobsHistoryLimit: {{ .Values.jobHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.jobHistoryLimit }}
   jobTemplate:
     spec:
+      backoffLimit: 3
       template:
-        metadata:
-          labels:
-            {{- include "job.labels" . | nindent 8 }}
         spec:
           serviceAccountName: {{ include "job.serviceAccountName" . }}
+          imagePullSecrets:
+            - name: {{ include "job.fullname" . }}-dockerconfigjson
           containers:
             - name: {{ .Chart.Name }}-cronjob
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
-              args:
-                {{- range .Values.args }}
-                - {{ . | quote }}
-                {{- end }}
               env:
-                {{- toYaml .Values.deployment.env | nindent 12 }}
-              {{ if .Values.externalSecrets.enabled}}
+                {{- range .Values.env }}
+                - name: {{ .name }}
+                  value: {{ .value | quote }}
+                {{- end }}
+              {{- if .Values.externalSecrets.enabled }}
               envFrom:
                 - secretRef:
                     name: {{ .Values.externalSecrets.managedSecretReference.secretName }}
               {{ end }}
           restartPolicy: OnFailure
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+              {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+              {{- toYaml . | nindent 12 }}
+          {{- end }}

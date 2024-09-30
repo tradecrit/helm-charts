@@ -1,6 +1,7 @@
 apiVersion: v2
 name: job
 description: A Helm chart for Kubernetes
+icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
 
 # A chart can be either an 'application' or a 'library' chart.
 #
