@@ -12,6 +12,11 @@ spec:
     spec:
       backoffLimit: 3
       template:
+        metadata:
+          annotations:
+            # disable istio on the pod due to this issue:
+            # https://github.com/istio/istio/issues/11659
+            sidecar.istio.io/inject: "false"
         spec:
           serviceAccountName: {{ include "job.serviceAccountName" . }}
           imagePullSecrets:
