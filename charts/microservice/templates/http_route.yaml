@@ -6,8 +6,6 @@ metadata:
 spec:
   parentRefs:
     {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
-  hostnames:
-    - {{ .Values.httpRoute.hostname }}
   rules:
     - matches:
         {{- toYaml .Values.httpRoute.matches | nindent 8 }}

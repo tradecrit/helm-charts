@@ -13,7 +13,6 @@ httpRoute:
       namespace: traefik
       sectionName: websecure
   hostname: ""
-  rules: []
   matches: []
   filters: [ ]
 
