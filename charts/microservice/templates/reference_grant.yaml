@@ -6,7 +6,7 @@ spec:
   from:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
-      namespace: traefik
+      namespace: {{ .Release.Namespace }}
   to:
     - group: ""
       kind: Service
