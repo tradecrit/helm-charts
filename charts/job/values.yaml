@@ -39,18 +39,8 @@ volumeMounts: [ ]
 nodeSelector: { }
 
 externalSecrets:
-  enabled: false
-  resyncInterval: 10
-  authentication:
-    universalAuth:
-      secretsScope:
-        projectSlug: development
-        envSlug: dev
-        secretsPath: "/"
-        recursive: true
-      credentialsRef:
-        secretName: universal-auth-credentials
-        secretNamespace: infisical
-  managedSecretReference:
-    secretName: secret
-    secretType: Opaque
+  secretsScope:
+    projectSlug: development
+    envSlug: dev
+    secretsPath: "/"
+    recursive: true
