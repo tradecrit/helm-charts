@@ -1,7 +1,7 @@
 apiVersion: secrets.infisical.com/v1alpha1
 kind: InfisicalSecret
 metadata:
-  name: {{ .Release.Name }}-dockerconfigjson
+  name: {{ include "job.fullname" . }}-dockerconfigjson
 spec:
   hostAPI: https://app.infisical.com/api
   resyncInterval: 10
@@ -17,7 +17,7 @@ spec:
         secretsPath: "/github"
         recursive: false
   managedSecretReference:
-    secretName: {{ .Release.Name }}-dockerconfigjson
+    secretName: {{ include "job.fullname" . }}-dockerconfigjson
     secretNamespace: {{ .Release.Namespace }}
     creationPolicy: "Owner" ## Owner | Orphan
     secretType: kubernetes.io/dockerconfigjson

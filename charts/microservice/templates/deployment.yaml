@@ -24,7 +24,7 @@ spec:
         {{- end }}
     spec:
       imagePullSecrets:
-        - name: {{ .Release.Name }}-dockerconfigjson
+        - name: {{ include "microservice.fullname" . }}-dockerconfigjson
       serviceAccountName: {{ include "microservice.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
@@ -34,7 +34,7 @@ spec:
             {{- toYaml .Values.deployment.env | nindent 12 }}
           envFrom:
             - secretRef:
-                name: {{ .Release.Name }}-microservice
+                name: {{ include "microservice.fullname" . }}
           ports:
             - name: microservice
               containerPort: {{ .Values.service.targetPort }}

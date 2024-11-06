@@ -32,12 +32,8 @@ spec:
                 {{- end }}
               envFrom:
                 - secretRef:
-                    name: {{ .Release.Name }}-job
+                    name: {{ include "job.fullname" . }}
           restartPolicy: OnFailure
-          {{- with .Values.imagePullSecrets }}
-          imagePullSecrets:
-              {{- toYaml . | nindent 12 }}
-          {{- end }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
               {{- toYaml . | nindent 12 }}
