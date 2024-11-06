@@ -32,11 +32,9 @@ spec:
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           env:
             {{- toYaml .Values.deployment.env | nindent 12 }}
-          {{ if .Values.externalSecrets.enabled}}
           envFrom:
             - secretRef:
-                name: {{ .Values.externalSecrets.managedSecretReference.secretName }}
-          {{ end }}
+                name: {{ .Release.Name }}-microservice
           ports:
             - name: microservice
               containerPort: {{ .Values.service.targetPort }}

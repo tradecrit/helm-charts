@@ -30,11 +30,9 @@ spec:
                 - name: {{ .name }}
                   value: {{ .value | quote }}
                 {{- end }}
-              {{- if .Values.externalSecrets.enabled }}
               envFrom:
                 - secretRef:
-                    name: {{ .Values.externalSecrets.managedSecretReference.secretName }}
-              {{ end }}
+                    name: {{ .Release.Name }}-job
           restartPolicy: OnFailure
           {{- with .Values.imagePullSecrets }}
           imagePullSecrets:
