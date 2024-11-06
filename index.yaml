@@ -3,6 +3,17 @@ entries:
   job:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-11-06T17:34:26.267957673Z"
+    description: A Helm chart for Kubernetes
+    digest: f807db92ce9bc7ee66c3c375f4e091c7390d86f02a2f30bde3bd03c3eccc37ec
+    icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
+    name: job
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/job-0.1.2/job-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-11-04T19:25:04.108723885Z"
     description: A Helm chart for Kubernetes
     digest: f6d1a56f4411fa24f3e821d46de57f535ae9f2ea935d5db16b49b20538107879
@@ -23,6 +34,17 @@ entries:
     - https://github.com/tradecrit/helm-charts/releases/download/job-0.1.0/job-0.1.0.tgz
     version: 0.1.0
   microservice:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-11-06T17:34:26.428877696Z"
+    description: A Helm chart for Kubernetes
+    digest: a53cfa32df9f4782a361064e7fe1f36d07f7a8ce9fc19f31345abaa115d7c235
+    icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
+    name: microservice
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/microservice-0.1.17/microservice-0.1.17.tgz
+    version: 0.1.17
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2024-11-06T17:33:01.478711082Z"
@@ -181,4 +203,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/webserver-0.1.12/webserver-0.1.12.tgz
     version: 0.1.12
-generated: "2024-11-06T17:33:01.478756928Z"
+generated: "2024-11-06T17:34:26.428936265Z"
