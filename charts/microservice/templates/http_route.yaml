@@ -14,9 +14,7 @@ spec:
     - matches:
         {{- toYaml .Values.httpRoute.matches | nindent 8 }}
       backendRefs:
-        - name: {{ include "microservice.fullname" . }}
-          port: {{ .Values.service.port }}
-          weight: 1
+        {{- toYaml .Values.httpRoute.backendRefs | nindent 8 }}
       filters:
         {{- toYaml .Values.httpRoute.filters | nindent 8 }}
 {{- end -}}

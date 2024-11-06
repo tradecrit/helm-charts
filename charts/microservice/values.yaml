@@ -6,15 +6,12 @@ replicaCount: 1
 
 httpRoute:
   enabled: false
-  parentRefs:
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: traefik
-      namespace: traefik
-      sectionName: websecure
-  hostname: ""
+  gatewayNamespace: istio-ingress
+  parentRefs: []
+  hostnames: []
   matches: []
   filters: [ ]
+  backendRefs: [ ]
 
 deployment:
   image:
@@ -52,21 +49,11 @@ deployment:
   labels: { }
 
 externalSecrets:
-  enabled: false
-  resyncInterval: 10
-  authentication:
-    universalAuth:
-      secretsScope:
-        projectSlug: development
-        envSlug: dev
-        secretsPath: "/"
-        recursive: true
-      credentialsRef:
-          secretName: universal-auth-credentials
-          secretNamespace: infisical
-  managedSecretReference:
-    secretName: secret
-    secretType: Opaque
+  secretsScope:
+    projectSlug: development
+    envSlug: dev
+    secretsPath: "/"
+    recursive: true
 
 serviceAccount:
   create: true

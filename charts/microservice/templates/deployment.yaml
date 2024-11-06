@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "microservice.fullname" . }}
+  name: {{ .Release.Name }}
   labels:
     {{- include "microservice.labels" . | nindent 4 }}
 spec:
@@ -24,7 +24,7 @@ spec:
         {{- end }}
     spec:
       imagePullSecrets:
-        - name: {{ include "microservice.fullname" . }}-dockerconfigjson
+        - name: {{ .Release.Name }}-dockerconfigjson
       serviceAccountName: {{ include "microservice.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
