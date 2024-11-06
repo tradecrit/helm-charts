@@ -69,6 +69,17 @@ entries:
   microservice:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-11-06T18:09:51.953347726Z"
+    description: A Helm chart for Kubernetes
+    digest: 1324b691b5cd44cce5ba6251dbfc78a958baaec10d4a99440969ed51ed522ece
+    icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
+    name: microservice
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/microservice-0.1.22/microservice-0.1.22.tgz
+    version: 0.1.22
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-11-06T18:03:26.428472506Z"
     description: A Helm chart for Kubernetes
     digest: 937e3b90eac917e475ad5b0683a5cd0cb9a340b38d9d2bc1ed1419b2a7982100
@@ -269,4 +280,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/webserver-0.1.12/webserver-0.1.12.tgz
     version: 0.1.12
-generated: "2024-11-06T18:03:26.428532307Z"
+generated: "2024-11-06T18:09:51.953431493Z"
