@@ -1,23 +1,23 @@
----
 apiVersion: secrets.infisical.com/v1alpha1
 kind: InfisicalSecret
 metadata:
-  name: {{ include "job.fullname" . }}-dockerconfigjson
+  name: {{ .Release.Name }}-dockerconfigjson
 spec:
   hostAPI: https://app.infisical.com/api
   resyncInterval: 10
   authentication:
-    universalAuth:
+    kubernetesAuth:
+      identityId: f4f297f4-f8ee-4d21-9d4c-c9bac0e21aaf
+      serviceAccountRef:
+        name: infisical-auth
+        namespace: infisical
       secretsScope:
         projectSlug: development-ko-nv
-        envSlug: {{ .Values.environment_slug | default "dev" }}
+        envSlug: {{ .Values.externalSecrets.secretsScope.envSlug }}
         secretsPath: "/github"
         recursive: false
-      credentialsRef:
-        secretName: universal-auth-credentials
-        secretNamespace: infisical
   managedSecretReference:
-    secretName: {{ include "job.fullname" . }}-dockerconfigjson
+    secretName: {{ .Release.Name }}-dockerconfigjson
     secretNamespace: {{ .Release.Namespace }}
-    creationPolicy: "Owner"
+    creationPolicy: "Owner" ## Owner | Orphan
     secretType: kubernetes.io/dockerconfigjson
