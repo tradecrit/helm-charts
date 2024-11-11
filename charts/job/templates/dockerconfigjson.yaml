@@ -6,11 +6,10 @@ spec:
   hostAPI: https://app.infisical.com/api
   resyncInterval: 10
   authentication:
-    kubernetesAuth:
-      identityId: {{ .Values.externalSecrets.identityId }}
-      serviceAccountRef:
-        name: infisical-auth
-        namespace: infisical
+    universalAuth:
+      credentialsRef:
+        secretName: {{ .Values.externalSecrets.credentialsRef.secretName }}
+        secretNamespace: {{ .Values.externalSecrets.credentialsRef.secretNamespace }}
       secretsScope:
         projectSlug: development-ko-nv
         envSlug: {{ .Values.externalSecrets.secretsScope.envSlug }}

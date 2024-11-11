@@ -49,9 +49,11 @@ deployment:
   labels: { }
 
 externalSecrets:
-  identityId: ""
+  credentialsRef:
+    secretName: universal-auth-credentials
+    secretNamespace: infisical
   secretsScope:
-    projectSlug: development
+    projectSlug: development-ko-nv
     envSlug: dev
     secretsPath: "/"
     recursive: true
