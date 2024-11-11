@@ -49,6 +49,7 @@ deployment:
   labels: { }
 
 externalSecrets:
+  identityId: ""
   secretsScope:
     projectSlug: development
     envSlug: dev

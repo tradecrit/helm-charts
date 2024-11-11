@@ -39,6 +39,7 @@ volumeMounts: [ ]
 nodeSelector: { }
 
 externalSecrets:
+  identityId: ""
   secretsScope:
     projectSlug: development
     envSlug: dev

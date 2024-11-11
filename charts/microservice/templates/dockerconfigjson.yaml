@@ -7,7 +7,7 @@ spec:
   resyncInterval: 10
   authentication:
     kubernetesAuth:
-      identityId: f4f297f4-f8ee-4d21-9d4c-c9bac0e21aaf
+      identityId: {{ .Values.externalSecrets.identityId }}
       serviceAccountRef:
         name: infisical-auth
         namespace: infisical
