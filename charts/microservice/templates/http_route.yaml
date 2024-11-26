@@ -19,8 +19,9 @@ spec:
         {{- toYaml .Values.httpRoute.backendRefs | nindent 8 }}
       {{- else }}
         - name: {{ include "microservice.fullname" . }}
-        kind: HTTPRoute
-        namespace: {{ .Release.Namespace }}
+          namespace: {{ .Release.Namespace }}
+          kind: Service
+          port: {{ .Values.service.port }}
       {{- end }}
       {{- if .Values.httpRoute.filters }}
       {{- end }}
