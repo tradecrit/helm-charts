@@ -7,6 +7,7 @@ spec:
   {{- if .Values.httpRoute.hostnames }}
   hostnames:
     {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
+    {{- toYaml .Values.httpRoute.hostnames | nindent 4 }}
   {{- end }}
   parentRefs:
     {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
@@ -14,7 +15,15 @@ spec:
     - matches:
         {{- toYaml .Values.httpRoute.matches | nindent 8 }}
       backendRefs:
+      {{- if .Values.httpRoute.backendRefs }}
         {{- toYaml .Values.httpRoute.backendRefs | nindent 8 }}
+      {{- else }}
+        - name: {{ include "microservice.fullname" . }}
+        kind: HTTPRoute
+        namespace: {{ .Release.Namespace }}
+      {{- end }}
+      {{- if .Values.httpRoute.filters }}
+      {{- end }}
       filters:
         {{- toYaml .Values.httpRoute.filters | nindent 8 }}
 {{- end -}}
