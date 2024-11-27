@@ -3,6 +3,17 @@ entries:
   job:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-11-27T15:57:33.288325466Z"
+    description: A Helm chart for Kubernetes
+    digest: 5cbafe6a50e6955dc7fc24a92760a91eef3acf28e444aa4c3ea0d77a7e7600e3
+    icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
+    name: job
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/job-0.1.27/job-0.1.27.tgz
+    version: 0.1.27
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-11-11T20:10:50.801692203Z"
     description: A Helm chart for Kubernetes
     digest: c6fb095fdfd895c85f18bb687fc8714afddf690bd2d3a90e90502a681cd92aa4
@@ -368,4 +379,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/webserver-0.1.12/webserver-0.1.12.tgz
     version: 0.1.12
-generated: "2024-11-26T17:26:31.604934905Z"
+generated: "2024-11-27T15:57:33.288425824Z"
