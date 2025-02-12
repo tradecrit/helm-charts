@@ -9,9 +9,10 @@ grafana:
       hostnames:
         - grafana.dev.tradecrit.com
       parentRefs:
-        - name: monitoring
-          namespace: monitoring
-          kind: Namespace
+      - name: istio-gateway
+        kind: Gateway
+        namespace: istio-ingress
+        sectionName: https-wildcard
       matches:
         - path:
             type: PathPrefix
