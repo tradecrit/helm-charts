@@ -14,15 +14,12 @@ loki:
     pattern_ingester:
       enabled: true
     limits_config:
-      allow_structured_metadata: true
-      volume_enabled: true
+      retention_period: 168h
     ruler:
       enable_api: true
     compactor:
       retention_enabled: true
-    table_manager:
-      retention_deletes_enabled: true
-      retention_period: 168h # 7 days (168 hours)
+      delete_request_store: s3
   minio:
     enabled: true
   deploymentMode: SingleBinary
@@ -106,3 +103,51 @@ grafana:
           secretName: grafana-admin-credentials
           secretNamespace: monitoring
           creationPolicy: "Owner" ## Owner | Orphan
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        uid: loki
+        url: http://grafana-loki:3100
+#      jsonData:
+#        derivedFields:
+#          - datasourceUid: tempo
+#            matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
+#            name: traceId
+#            url: '$${__value.raw}'
+#    - name: Tempo
+#      type: tempo
+#      access: proxy
+#      uid: tempo
+#      url: http://tempo:3200
+#      jsonData:
+#        nodeGraph:
+#          enabled: true
+#        serviceMap:
+#          datasourceUid: 'Mimir'
+#        tracesToLogs:
+#          datasourceUid: loki
+#          filterByTraceID: false
+#          spanEndTimeShift: "500ms"
+#          spanStartTimeShift: "-500ms"
+#    - name: Mimir
+#      type: prometheus
+#      access: proxy
+#      uid: mimir
+#      url: http://mimir:9009/prometheus
+#      jsonData:
+#        exemplarTraceIdDestinations:
+#          - datasourceUid: tempo
+#            name: traceID
+#        httpMethod: POST
+#        timeInterval: "2s"
+#    - name: Pyroscope
+#      type: phlare
+#      access: proxy
+#      uid: pyroscope
+#      url: http://pyroscope:4040
+#      jsonData:
+#        backendType: pyroscope
