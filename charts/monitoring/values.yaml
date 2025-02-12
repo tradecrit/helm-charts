@@ -51,7 +51,6 @@ loki:
       tsdb_shipper:
         active_index_directory: /var/loki/index
         cache_location: /var/loki/cache
-        shared_store: filesystem
       filesystem:
         directory: /var/loki/chunks
     storage:
@@ -162,12 +161,12 @@ grafana:
           access: proxy
           uid: loki
           url: http://grafana-loki:3100
-#      jsonData:
-#        derivedFields:
-#          - datasourceUid: tempo
-#            matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
-#            name: traceId
-#            url: '$${__value.raw}'
+        - name: prometheus
+          type: prometheus
+          access: proxy
+          uid: prometheus
+          url: http://grafana-prometheus-server:9090
+
 #    - name: Tempo
 #      type: tempo
 #      access: proxy
