@@ -42,22 +42,35 @@ loki:
       configs:
         - from: "2024-04-01"
           store: tsdb
-          object_store: s3
+          object_store: filesystem
           schema: v13
           index:
             prefix: loki_index_
             period: 24h
+    storage_config:
+      tsdb_shipper:
+        active_index_directory: /var/loki/index
+        cache_location: /var/loki/cache
+        shared_store: filesystem
+      filesystem:
+        directory: /var/loki/chunks
+    storage:
+      type: filesystem
     pattern_ingester:
       enabled: true
     limits_config:
       retention_period: 168h
     ruler:
       enable_api: true
+      storage:
+        type: local
+        local:
+          directory: /var/loki/rules
     compactor:
       retention_enabled: true
-      delete_request_store: s3
+      delete_request_store: filesystem
   minio:
-    enabled: true
+    enabled: false
   deploymentMode: SingleBinary
   singleBinary:
     replicas: 1
@@ -85,6 +98,7 @@ loki:
     replicas: 0
   bloomGateway:
     replicas: 0
+
 
 grafana:
   enabled: true
