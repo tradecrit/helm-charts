@@ -1,0 +1,45 @@
+grafana:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 20Gi
+  route:
+    main:
+      enabled: true
+      hostnames:
+        - grafana.dev.tradecrit.com
+      parentRefs:
+        - name: monitoring
+          namespace: monitoring
+          kind: Namespace
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+  admin:
+    existingSecret: "grafana-admin-credentials"
+    userKey: admin-user
+    passwordKey: admin-password
+  extraObjects:
+    - apiVersion: secrets.infisical.com/v1alpha1
+      kind: InfisicalSecret
+      metadata:
+        name: grafana-admin-credentials
+        namespace: monitoring
+      spec:
+        hostAPI: https://app.infisical.com/api
+        resyncInterval: 10
+        authentication:
+          universalAuth:
+            secretsScope:
+              projectSlug: development-ko-nv
+              envSlug: dev
+              secretsPath: "/grafana"
+              recursive: true
+            credentialsRef:
+              secretName: universal-auth-credentials
+              secretNamespace: infisical
+        managedSecretReference:
+          secretName: grafana-admin-credentials
+          secretNamespace: monitoring
+          creationPolicy: "Owner" ## Owner | Orphan
