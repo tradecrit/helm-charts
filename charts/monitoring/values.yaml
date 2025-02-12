@@ -1,5 +1,5 @@
 mimir:
-  enabled: true
+  enabled: false
   minio:
     enabled: false
   alertmanager:
@@ -56,6 +56,7 @@ mimir:
 
 
 loki:
+  enabled: false
   loki:
     auth_enabled: false
     commonConfig:
@@ -99,7 +100,7 @@ loki:
     # default is 500MB, with limited memory keep this smaller
     writebackSizeLimit: 10MB
   minio:
-    enabled: true
+    enabled: false
   backend:
     replicas: 0
   read:
@@ -126,9 +127,19 @@ loki:
     replicas: 0
 
 
-
 tempo:
-  enabled: false
+  enabled: true
+  minio:
+    enabled: true
+  ingester:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 20m
+    persistence:
+      enabled: true
+      size: 8Gi
+
 
 grafana:
   enabled: true
@@ -138,7 +149,7 @@ grafana:
     port: 8080
   persistence:
     enabled: true
-    size: 20Gi
+    size: 8Gi
   httpRoute:
     enabled: false
     hostnames:
@@ -194,42 +205,3 @@ grafana:
           access: proxy
           uid: loki
           url: http://grafana-loki:3100
-        - name: prometheus
-          type: prometheus
-          access: proxy
-          uid: prometheus
-          url: http://grafana-prometheus-server:9090
-
-#    - name: Tempo
-#      type: tempo
-#      access: proxy
-#      uid: tempo
-#      url: http://tempo:3200
-#      jsonData:
-#        nodeGraph:
-#          enabled: true
-#        serviceMap:
-#          datasourceUid: 'Mimir'
-#        tracesToLogs:
-#          datasourceUid: loki
-#          filterByTraceID: false
-#          spanEndTimeShift: "500ms"
-#          spanStartTimeShift: "-500ms"
-#    - name: Mimir
-#      type: prometheus
-#      access: proxy
-#      uid: mimir
-#      url: http://mimir:9009/prometheus
-#      jsonData:
-#        exemplarTraceIdDestinations:
-#          - datasourceUid: tempo
-#            name: traceID
-#        httpMethod: POST
-#        timeInterval: "2s"
-#    - name: Pyroscope
-#      type: phlare
-#      access: proxy
-#      uid: pyroscope
-#      url: http://pyroscope:4040
-#      jsonData:
-#        backendType: pyroscope
