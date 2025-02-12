@@ -1,4 +1,5 @@
 loki:
+  enabled: true
   loki:
     commonConfig:
       replication_factor: 1
@@ -22,6 +23,7 @@ loki:
       delete_request_store: s3
   minio:
     enabled: true
+  auth_enabled: false
   deploymentMode: SingleBinary
   singleBinary:
     replicas: 1
