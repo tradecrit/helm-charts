@@ -1,22 +1,29 @@
 grafana:
   enabled: true
+  service:
+    port: 8080
   persistence:
     enabled: true
     size: 20Gi
-  route:
-    main:
-      enabled: true
-      hostnames:
-        - grafana.dev.tradecrit.com
-      parentRefs:
+  httpRoute:
+    enabled: true
+    hostnames:
+      - grafana.dev.tradecrit.com
+    parentRefs:
       - name: istio-gateway
         kind: Gateway
         namespace: istio-ingress
         sectionName: https-wildcard
-      matches:
-        - path:
-            type: PathPrefix
-            value: /
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    filters: []
+    backendRefs:
+      - name: grafana
+        namespace: monitoring
+        kind: Service
+        port: 8080
   admin:
     existingSecret: "grafana-admin-credentials"
     userKey: admin-user

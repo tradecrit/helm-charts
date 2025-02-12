@@ -32,7 +32,7 @@ deployment:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
-      maxSurge: 1
+      maxSurge: 2
 
   livenessProbe: {}
 
