@@ -56,20 +56,26 @@ mimir:
 
 
 loki:
-  enabled: false
+  enabled: true
   loki:
     auth_enabled: false
     commonConfig:
       replication_factor: 1
     schemaConfig:
       configs:
-        - from: "2024-04-01"
+        - from: 2024-04-01
           store: tsdb
           object_store: s3
           schema: v13
           index:
             prefix: loki_index_
             period: 24h
+    ingester:
+      chunk_encoding: snappy
+    tracing:
+      enabled: true
+    querier:
+      max_concurrent: 2
     pattern_ingester:
       enabled: true
     limits_config:
@@ -79,6 +85,7 @@ loki:
       enable_api: true
     compactor:
       retention_enabled: true
+      delete_request_store: s3
     table_manager:
       retention_deletes_enabled: true
       retention_period: 168h # 7 days (168 hours)
@@ -100,7 +107,7 @@ loki:
     # default is 500MB, with limited memory keep this smaller
     writebackSizeLimit: 10MB
   minio:
-    enabled: false
+    enabled: true
   backend:
     replicas: 0
   read:
@@ -108,8 +115,6 @@ loki:
   write:
     replicas: 0
   ingester:
-    replicas: 0
-  querier:
     replicas: 0
   queryFrontend:
     replicas: 0
@@ -129,8 +134,6 @@ loki:
 
 tempo:
   enabled: true
-  minio:
-    enabled: true
   ingester:
     replicas: 1
     resources:
