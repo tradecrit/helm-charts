@@ -26,11 +26,6 @@ loki:
     enabled: true
   querier:
     max_concurrent: 2
-  storage_config:
-    aws:
-      region: us-west-1
-      bucketnames: loki-chunks
-      s3forcepathstyle: false
   storage:
     type: s3
     bucketNames:
@@ -47,11 +42,11 @@ loki:
       # AWS signature version (e.g., v2 or v4)
       signatureVersion: v4
       # Forces the path style for S3 (true/false)
-      s3ForcePathStyle: false
+      s3ForcePathStyle: true
       # Allows insecure (HTTP) connections (true/false)
       insecure: false
-      # HTTP configuration settings
-      http_config: {}
+      http_config:
+        insecure_skip_verify: true  # Skip TLS certificate verification
 
 deploymentMode: SingleBinary
 
