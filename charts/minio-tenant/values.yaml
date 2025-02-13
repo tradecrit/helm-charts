@@ -1,0 +1,30 @@
+operator:
+  image:
+    repository: minio/operator
+    tag: 7.0.0
+
+
+tenant:
+  tenant:
+    name: minio-tenant
+    configSecret: {}
+    configuration:
+      name: storage-configuration
+    pools:
+      - servers: 1
+        name: pool-0
+        volumesPerServer: 4
+        size: 20Gi
+        storageClassName: directpv-min-io
+    metrics:
+      enabled: true
+    features:
+      bucketDNS: true
+      domains: { }
+      enableSFTP: false
+    buckets:
+      - name: loki-chunks
+      - name: loki-admin
+      - name: loki-ruler
+    users:
+      - name: storage-user
