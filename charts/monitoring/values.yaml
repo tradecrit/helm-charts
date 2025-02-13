@@ -154,7 +154,7 @@ grafana:
     enabled: true
     size: 8Gi
   httpRoute:
-    enabled: false
+    enabled: true
     hostnames:
       - grafana.dev.tradecrit.com
     parentRefs:
