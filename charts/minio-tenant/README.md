@@ -1,5 +1,5 @@
 helm upgrade --install \
---namespace minio-operator \
+--namespace minio-tenant \
 --create-namespace \
-operator . \
+tenant . \
 --values ./values.yaml

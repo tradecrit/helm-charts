@@ -1,9 +1,3 @@
-operator:
-  image:
-    repository: minio/operator
-    tag: 7.0.0
-
-
 tenant:
   tenant:
     name: minio-tenant
