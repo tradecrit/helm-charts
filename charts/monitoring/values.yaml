@@ -291,6 +291,22 @@ grafana:
           secretName: grafana-admin-credentials
           secretNamespace: monitoring
           creationPolicy: "Owner" ## Owner | Orphan
+#  plugins:
+  dashboardProviders:
+    enabled: true
+    dashboards:
+      - name: "default"
+        orgId: 1
+        folder: "default"
+        type: file
+        disableDeletion: false
+        options:
+          path: /var/lib/grafana/dashboards
+  dashboards:
+    default:
+      imported-dashboard-name:
+        gnetId: 13502
+        datasource: yourdatasource
   datasources:
     datasources.yaml:
       apiVersion: 1
