@@ -290,22 +290,22 @@ grafana:
                 matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
                 name: traceId
                 url: '$${__value.raw}'
-#        - name: Tempo
-#          type: tempo
-#          access: proxy
-#          uid: tempo
-#          default: true
-#          url: http://grafana-tempo-query-frontend:3100/
-#          jsonData:
-#            nodeGraph:
-#              enabled: true
-#            serviceMap:
-#              datasourceUid: mimir
-#            tracesToLogs:
-#              datasourceUid: loki
-#              filterByTraceID: false
-#              spanEndTimeShift: "500ms"
-#              spanStartTimeShift: "-500ms"
+        - name: Tempo
+          type: tempo
+          access: proxy
+          uid: tempo
+          default: true
+          url: http://grafana-tempo-query-frontend:3100/
+          jsonData:
+            nodeGraph:
+              enabled: true
+            serviceMap:
+              datasourceUid: mimir
+            tracesToLogs:
+              datasourceUid: loki
+              filterByTraceID: false
+              spanEndTimeShift: "500ms"
+              spanStartTimeShift: "-500ms"
         - name: Mimir
           type: prometheus
           access: proxy
