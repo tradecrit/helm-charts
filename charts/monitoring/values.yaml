@@ -1,3 +1,11 @@
+alloy:
+  enabled: true
+  alloy:
+    configMap:
+      create: false
+      name: alloy-config
+      key: config.alloy
+
 mimir:
   enabled: true
   mimir:
@@ -41,8 +49,8 @@ mimir:
         cpu: 20m
   ingester:
     replicas: 2
-    topologySpreadConstraints: {}
-    affinity: {}
+    topologySpreadConstraints: { }
+    affinity: { }
     zoneAwareReplication:
       enabled: false
     resources:
