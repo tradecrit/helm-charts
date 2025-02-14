@@ -10,8 +10,6 @@ mimir:
             endpoint: minio.minio-tenant.svc.cluster.local
             access_key_id: storage-user
             secret_access_key: ""
-            http:
-              insecure_skip_verify: true
       blocks_storage:
         backend: s3
         s3:
@@ -27,19 +25,6 @@ mimir:
         backend: s3
         s3:
           bucket_name: mimir-ruler
-  metaMonitoring:
-    dashboards:
-      enabled: true
-    serviceMonitor:
-      enabled: true
-    prometheusRule:
-      enabled: true
-      mimirAlerts: true
-      mimirRules: true
-    grafanaAgent:
-      enabled: true
-      serviceMonitor:
-          enabled: true
   minio:
     enabled: false
   alertmanager:
@@ -304,22 +289,6 @@ grafana:
           secretName: grafana-admin-credentials
           secretNamespace: monitoring
           creationPolicy: "Owner" ## Owner | Orphan
-#  plugins:
-#  dashboardProviders:
-#    enabled: true
-#    dashboards:
-#      - name: "default"
-#        orgId: 1
-#        folder: "default"
-#        type: file
-#        disableDeletion: false
-#        options:
-#          path: /var/lib/grafana/dashboards
-#  dashboards:
-#    default:
-#      imported-dashboard-name:
-#        gnetId: 13502
-#        datasource: yourdatasource
   datasources:
     datasources.yaml:
       apiVersion: 1

@@ -1,4 +1,0 @@
-operator:
-  image:
-    repository: minio/operator
-    tag: 7.0.0
