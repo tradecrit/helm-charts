@@ -2,6 +2,9 @@ tenant:
   tenant:
     name: minio-tenant
     configSecret: {}
+    poolsMetadata:
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
     configuration:
       name: storage-configuration
     pools:
