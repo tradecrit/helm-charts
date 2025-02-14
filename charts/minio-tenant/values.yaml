@@ -21,5 +21,9 @@ tenant:
       - name: loki-admin
       - name: loki-ruler
       - name: tempo-traces
+      - name: mimir
+      - name: mimir-blocks
+      - name: mimir-alertmanager
+      - name: mimir-ruler
     users:
       - name: storage-user

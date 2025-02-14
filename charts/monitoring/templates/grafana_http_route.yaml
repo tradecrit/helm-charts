@@ -1,3 +1,4 @@
+{{- if .Values.grafana.enabled -}}
 {{- if .Values.grafana.httpRoute.enabled -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -37,4 +38,5 @@ spec:
       filters:
         {{- toYaml .Values.grafana.httpRoute.filters | nindent 8 }}
       {{- end }}
+  {{- end }}
   {{- end }}
