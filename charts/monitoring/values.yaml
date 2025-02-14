@@ -1,5 +1,5 @@
 mimir:
-  enabled: true
+  enabled: false
   mimir:
     structuredConfig:
       common:
@@ -113,24 +113,23 @@ loki:
     storage:
       type: s3
       bucketNames:
-        chunks: loki-chunks
-        ruler: loki-ruler
-        admin: loki-admin
+        chunks: tradecrit-dev-loki-chunks
+        ruler: tradecrit-dev-loki-ruler
+        admin: tradecrit-dev-loki-admin
       s3:
         # s3 URL can be used to specify the endpoint, access key, secret key, and bucket name this works well for S3 compatible storage or if you are hosting Loki on-premises and want to use S3 as the storage backend. Either use the s3 URL or the individual fields below (AWS endpoint, region, secret).
-        endpoint: minio.minio-tenant.svc.cluster.local
+        endpoint: digitaloceanspaces.com
+        region: sfo2
         # AWS secret access key
         secretAccessKey: ""
         # AWS access key ID
-        accessKeyId: storage-user
+        accessKeyId: ""
         # AWS signature version (e.g., v2 or v4)
         signatureVersion: v4
         # Forces the path style for S3 (true/false)
         s3ForcePathStyle: true
         # Allows insecure (HTTP) connections (true/false)
         insecure: false
-        http_config:
-          insecure_skip_verify: true  # Skip TLS certificate verification
 
   deploymentMode: SingleBinary
 
@@ -192,7 +191,7 @@ loki:
     replicas: 0
 
 tempo:
-  enabled: true
+  enabled: false
   minio:
     enabled: false
   ingester:
@@ -235,7 +234,7 @@ tempo:
       enabled: false
 
 grafana:
-  enabled: true
+  enabled: false
   serviceMonitor:
     enabled: true
   service:
