@@ -84,7 +84,7 @@ mimir:
         cpu: 20m
 
 loki:
-  enabled: false
+  enabled: true
   loki:
     auth_enabled: false
     commonConfig:
@@ -194,11 +194,13 @@ loki:
     replicas: 0
 
 tempo:
-  enabled: false
+  enabled: true
   minio:
     enabled: false
   ingester:
     replicas: 1
+    config:
+      replication_factor: 1
     resources:
       requests:
         cpu: 20m
@@ -215,6 +217,11 @@ tempo:
         forcepathstyle: true
   distributor:
     replicas: 1
+    config:
+      log_received_spans:
+        enabled: true
+      log_discarded_spans:
+        enabled: true
   traces:
     otlp:
       grpc:
@@ -230,7 +237,7 @@ tempo:
       enabled: false
 
 grafana:
-  enabled: false
+  enabled: true
   serviceMonitor:
     enabled: true
   service:
@@ -293,3 +300,36 @@ grafana:
           access: proxy
           uid: loki
           url: http://grafana-loki:3100
+          jsonData:
+            derivedFields:
+              - datasourceUid: tempo
+                matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
+                name: traceId
+                url: '$${__value.raw}'
+        - name: Tempo
+          type: tempo
+          access: proxy
+          uid: tempo
+          default: true
+          url: http://grafana-tempo-query-frontend:3100/
+          jsonData:
+            nodeGraph:
+              enabled: true
+            serviceMap:
+              datasourceUid: mimir
+            tracesToLogs:
+              datasourceUid: loki
+              filterByTraceID: false
+              spanEndTimeShift: "500ms"
+              spanStartTimeShift: "-500ms"
+        - name: Mimir
+          type: prometheus
+          access: proxy
+          uid: mimir
+          url: http://grafana-mimir-nginx/prometheus
+          jsonData:
+            exemplarTraceIdDestinations:
+              - datasourceUid: tempo
+                name: traceID
+            httpMethod: POST
+            timeInterval: "2s"
