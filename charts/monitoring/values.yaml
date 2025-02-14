@@ -1,30 +1,30 @@
 mimir:
-  enabled: false
+  enabled: true
   mimir:
     structuredConfig:
       common:
         storage:
           backend: s3
           s3:
-            bucket_name: mimir
-            endpoint: minio.minio-tenant.svc.cluster.local
-            access_key_id: storage-user
+            bucket_name: tradecrit-dev-mimir
+            endpoint: sfo2.digitaloceanspaces.com
+            access_key_id: ""
             secret_access_key: ""
       blocks_storage:
         backend: s3
         s3:
-          bucket_name: mimir-blocks
+          bucket_name: tradecrit-dev-mimir-blocks
         tsdb:
           retention_period: 168h
           ship_interval: 15s
       alertmanager_storage:
         backend: s3
         s3:
-          bucket_name: mimir-alertmanager
+          bucket_name: tradecrit-dev-mimir-alertmanager
       ruler_storage:
         backend: s3
         s3:
-          bucket_name: mimir-ruler
+          bucket_name: tradecrit-dev-mimir-ruler
   minio:
     enabled: false
   alertmanager:
@@ -118,8 +118,7 @@ loki:
         admin: tradecrit-dev-loki-admin
       s3:
         # s3 URL can be used to specify the endpoint, access key, secret key, and bucket name this works well for S3 compatible storage or if you are hosting Loki on-premises and want to use S3 as the storage backend. Either use the s3 URL or the individual fields below (AWS endpoint, region, secret).
-        endpoint: digitaloceanspaces.com
-        region: sfo2
+        endpoint: sfo2.digitaloceanspaces.com
         # AWS secret access key
         secretAccessKey: ""
         # AWS access key ID
@@ -130,16 +129,11 @@ loki:
         s3ForcePathStyle: true
         # Allows insecure (HTTP) connections (true/false)
         insecure: false
-
   deploymentMode: SingleBinary
-
   singleBinary:
     autoscaling:
-      # -- Enable autoscaling
       enabled: true
-      # -- Minimum autoscaling replicas for the single binary
       minReplicas: 1
-      # -- Maximum autoscaling replicas for the single binary
       maxReplicas: 3
     persistence:
       enabled: true
@@ -155,16 +149,10 @@ loki:
       # Keep a little bit lower than memory limits
       - name: GOMEMLIMIT
         value: 3750MiB
-
   chunksCache:
-    # default is 500MB, with limited memory keep this smaller
     writebackSizeLimit: 10MB
-
-  # Enable minio for storage
   minio:
     enabled: false
-
-  # Zero out replica counts of other deployment modes
   backend:
     replicas: 0
   read:
@@ -234,7 +222,7 @@ tempo:
       enabled: false
 
 grafana:
-  enabled: false
+  enabled: true
   serviceMonitor:
     enabled: true
   service:
@@ -303,22 +291,22 @@ grafana:
                 matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
                 name: traceId
                 url: '$${__value.raw}'
-        - name: Tempo
-          type: tempo
-          access: proxy
-          uid: tempo
-          default: true
-          url: http://grafana-tempo-query-frontend:3100/
-          jsonData:
-            nodeGraph:
-              enabled: true
-            serviceMap:
-              datasourceUid: mimir
-            tracesToLogs:
-              datasourceUid: loki
-              filterByTraceID: false
-              spanEndTimeShift: "500ms"
-              spanStartTimeShift: "-500ms"
+#        - name: Tempo
+#          type: tempo
+#          access: proxy
+#          uid: tempo
+#          default: true
+#          url: http://grafana-tempo-query-frontend:3100/
+#          jsonData:
+#            nodeGraph:
+#              enabled: true
+#            serviceMap:
+#              datasourceUid: mimir
+#            tracesToLogs:
+#              datasourceUid: loki
+#              filterByTraceID: false
+#              spanEndTimeShift: "500ms"
+#              spanStartTimeShift: "-500ms"
         - name: Mimir
           type: prometheus
           access: proxy
