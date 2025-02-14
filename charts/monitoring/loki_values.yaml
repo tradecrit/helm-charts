@@ -1,108 +1,110 @@
 ---
 loki:
-  auth_enabled: false
-  commonConfig:
-    replication_factor: 1
-  schemaConfig:
-    configs:
-      - from: 2024-04-01
-        store: tsdb
-        object_store: s3
-        schema: v13
-        index:
-          prefix: loki_index_
-          period: 24h
+  enabled: true
+  loki:
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    schemaConfig:
+      configs:
+        - from: 2024-04-01
+          store: tsdb
+          object_store: s3
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    ingester:
+      chunk_encoding: snappy
+      lifecycler:
+        ring:
+          kvstore:
+            store: inmemory
+          replication_factor: 1
+      chunk_idle_period: 10s
+      chunk_retain_period: 20s
+      max_chunk_age: 30s
+    tracing:
+      enabled: true
+    querier:
+      max_concurrent: 2
+    storage:
+      type: s3
+      bucketNames:
+        chunks: loki-chunks
+        ruler: loki-ruler
+        admin: loki-admin
+      s3:
+        # s3 URL can be used to specify the endpoint, access key, secret key, and bucket name this works well for S3 compatible storage or if you are hosting Loki on-premises and want to use S3 as the storage backend. Either use the s3 URL or the individual fields below (AWS endpoint, region, secret).
+        endpoint: minio.minio-tenant.svc.cluster.local
+        # AWS secret access key
+        secretAccessKey: ""
+        # AWS access key ID
+        accessKeyId: storage-user
+        # AWS signature version (e.g., v2 or v4)
+        signatureVersion: v4
+        # Forces the path style for S3 (true/false)
+        s3ForcePathStyle: true
+        # Allows insecure (HTTP) connections (true/false)
+        insecure: false
+        http_config:
+          insecure_skip_verify: true  # Skip TLS certificate verification
+
+  deploymentMode: SingleBinary
+
+  singleBinary:
+    autoscaling:
+      # -- Enable autoscaling
+      enabled: true
+      # -- Minimum autoscaling replicas for the single binary
+      minReplicas: 1
+      # -- Maximum autoscaling replicas for the single binary
+      maxReplicas: 3
+    persistence:
+      enabled: true
+      size: 20Gi
+    resources:
+      limits:
+        cpu: 3
+        memory: 4Gi
+      requests:
+        cpu: 2
+        memory: 2Gi
+    extraEnv:
+      # Keep a little bit lower than memory limits
+      - name: GOMEMLIMIT
+        value: 3750MiB
+
+  chunksCache:
+    # default is 500MB, with limited memory keep this smaller
+    writebackSizeLimit: 10MB
+
+  # Enable minio for storage
+  minio:
+    enabled: false
+
+  # Zero out replica counts of other deployment modes
+  backend:
+    replicas: 0
+  read:
+    replicas: 0
+  write:
+    replicas: 0
   ingester:
-    chunk_encoding: snappy
-    lifecycler:
-      ring:
-        kvstore:
-          store: inmemory
-        replication_factor: 1
-    chunk_idle_period: 10s
-    chunk_retain_period: 20s
-    max_chunk_age: 30s
-  tracing:
-    enabled: true
+    replicas: 0
   querier:
-    max_concurrent: 2
-  storage:
-    type: s3
-    bucketNames:
-      chunks: loki-chunks
-      ruler: loki-ruler
-      admin: loki-admin
-    s3:
-      # s3 URL can be used to specify the endpoint, access key, secret key, and bucket name this works well for S3 compatible storage or if you are hosting Loki on-premises and want to use S3 as the storage backend. Either use the s3 URL or the individual fields below (AWS endpoint, region, secret).
-      endpoint: minio.minio-tenant.svc.cluster.local
-      # AWS secret access key
-      secretAccessKey: ""
-      # AWS access key ID
-      accessKeyId: storage-user
-      # AWS signature version (e.g., v2 or v4)
-      signatureVersion: v4
-      # Forces the path style for S3 (true/false)
-      s3ForcePathStyle: true
-      # Allows insecure (HTTP) connections (true/false)
-      insecure: false
-      http_config:
-        insecure_skip_verify: true  # Skip TLS certificate verification
-
-deploymentMode: SingleBinary
-
-singleBinary:
-  autoscaling:
-    # -- Enable autoscaling
-    enabled: true
-    # -- Minimum autoscaling replicas for the single binary
-    minReplicas: 1
-    # -- Maximum autoscaling replicas for the single binary
-    maxReplicas: 3
-  persistence:
-    enabled: true
-    size: 20Gi
-  resources:
-    limits:
-      cpu: 3
-      memory: 4Gi
-    requests:
-      cpu: 2
-      memory: 2Gi
-  extraEnv:
-    # Keep a little bit lower than memory limits
-    - name: GOMEMLIMIT
-      value: 3750MiB
-
-chunksCache:
-  # default is 500MB, with limited memory keep this smaller
-  writebackSizeLimit: 10MB
-
-# Enable minio for storage
-minio:
-  enabled: false
-
-# Zero out replica counts of other deployment modes
-backend:
-  replicas: 0
-read:
-  replicas: 0
-write:
-  replicas: 0
-ingester:
-  replicas: 0
-querier:
-  replicas: 0
-queryFrontend:
-  replicas: 0
-queryScheduler:
-  replicas: 0
-distributor:
-  replicas: 0
-compactor:
-  replicas: 0
-indexGateway:
-  replicas: 0
-bloomCompactor:
-  replicas: 0
-bloomGateway:
-  replicas: 0
+    replicas: 0
+  queryFrontend:
+    replicas: 0
+  queryScheduler:
+    replicas: 0
+  distributor:
+    replicas: 0
+  compactor:
+    replicas: 0
+  indexGateway:
+    replicas: 0
+  bloomCompactor:
+    replicas: 0
+  bloomGateway:
+    replicas: 0

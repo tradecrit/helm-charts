@@ -20,5 +20,6 @@ tenant:
       - name: loki-chunks
       - name: loki-admin
       - name: loki-ruler
+      - name: tempo-traces
     users:
       - name: storage-user

@@ -1,0 +1,64 @@
+grafana:
+  enabled: false
+  serviceMonitor:
+    enabled: true
+  service:
+    port: 8080
+  persistence:
+    enabled: true
+    size: 8Gi
+  httpRoute:
+    enabled: true
+    hostnames:
+      - grafana.dev.tradecrit.com
+    parentRefs:
+      - name: istio-gateway
+        kind: Gateway
+        namespace: istio-ingress
+        sectionName: https-wildcard
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    filters: [ ]
+    backendRefs:
+      - name: grafana
+        namespace: monitoring
+        kind: Service
+        port: 8080
+  admin:
+    existingSecret: "grafana-admin-credentials"
+    userKey: admin-user
+    passwordKey: admin-password
+  extraObjects:
+    - apiVersion: secrets.infisical.com/v1alpha1
+      kind: InfisicalSecret
+      metadata:
+        name: grafana-admin-credentials
+        namespace: monitoring
+      spec:
+        hostAPI: https://app.infisical.com/api
+        resyncInterval: 10
+        authentication:
+          universalAuth:
+            secretsScope:
+              projectSlug: development-ko-nv
+              envSlug: dev
+              secretsPath: "/grafana"
+              recursive: true
+            credentialsRef:
+              secretName: universal-auth-credentials
+              secretNamespace: infisical
+        managedSecretReference:
+          secretName: grafana-admin-credentials
+          secretNamespace: monitoring
+          creationPolicy: "Owner" ## Owner | Orphan
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          uid: loki
+          url: http://grafana-loki:3100
