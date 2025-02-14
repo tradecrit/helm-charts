@@ -14,10 +14,11 @@ mimir:
               insecure_skip_verify: true
       blocks_storage:
         backend: s3
-        bucket_name: mimir-blocks
+        s3:
+          bucket_name: mimir-blocks
         tsdb:
           retention_period: 168h
-          dir: /data/ingester
+          ship_interval: 15s
 
       alertmanager_storage:
         backend: s3
