@@ -19,12 +19,10 @@ mimir:
         tsdb:
           retention_period: 168h
           ship_interval: 15s
-
       alertmanager_storage:
         backend: s3
         s3:
           bucket_name: mimir-alertmanager
-
       ruler_storage:
         backend: s3
         s3:
@@ -44,7 +42,9 @@ mimir:
       requests:
         cpu: 20m
   ingester:
-    replicas: 1
+    replicas: 2
+    topologySpreadConstraints: {}
+    affinity: {}
     zoneAwareReplication:
       enabled: false
     resources:
@@ -292,21 +292,21 @@ grafana:
           secretNamespace: monitoring
           creationPolicy: "Owner" ## Owner | Orphan
 #  plugins:
-  dashboardProviders:
-    enabled: true
-    dashboards:
-      - name: "default"
-        orgId: 1
-        folder: "default"
-        type: file
-        disableDeletion: false
-        options:
-          path: /var/lib/grafana/dashboards
-  dashboards:
-    default:
-      imported-dashboard-name:
-        gnetId: 13502
-        datasource: yourdatasource
+#  dashboardProviders:
+#    enabled: true
+#    dashboards:
+#      - name: "default"
+#        orgId: 1
+#        folder: "default"
+#        type: file
+#        disableDeletion: false
+#        options:
+#          path: /var/lib/grafana/dashboards
+#  dashboards:
+#    default:
+#      imported-dashboard-name:
+#        gnetId: 13502
+#        datasource: yourdatasource
   datasources:
     datasources.yaml:
       apiVersion: 1
