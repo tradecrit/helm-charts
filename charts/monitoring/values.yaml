@@ -179,7 +179,7 @@ loki:
     replicas: 0
 
 tempo:
-  enabled: false
+  enabled: true
   minio:
     enabled: false
   ingester:
@@ -193,12 +193,11 @@ tempo:
     trace:
       backend: s3
       s3:
-        bucket: 'tempo-traces'
-        endpoint: minio.minio-tenant.svc.cluster.local
-        access_key: storage-user
+        bucket: tradecrit-dev-tempo-traces
+        endpoint: sfo2.digitaloceanspaces.com
+        access_key: ""
         secret_key: ""
         insecure: false
-        tls_insecure_skip_verify: true
         forcepathstyle: true
   distributor:
     replicas: 1
