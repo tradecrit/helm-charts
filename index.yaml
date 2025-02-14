@@ -1,0 +1,72 @@
+apiVersion: v1
+entries:
+  job:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-02-14T17:00:32.689568084Z"
+    description: A Helm chart for Kubernetes
+    digest: 5568a92109780ca81105461686d7c015ab552cca1fd52b3eccf07e44449393e4
+    icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
+    name: job
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/job-0.1.27/job-0.1.27.tgz
+    version: 0.1.27
+  microservice:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-02-14T17:00:32.820287209Z"
+    description: A Helm chart for Kubernetes
+    digest: 129b719e650505985fcdcbd26b463fcba38e1db62d1bc83e1108b8a573516ac2
+    icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
+    name: microservice
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/microservice-0.1.27/microservice-0.1.27.tgz
+    version: 0.1.27
+  minio:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-02-14T17:00:32.962913153Z"
+    dependencies:
+    - name: tenant
+      repository: https://operator.min.io
+      version: 7.0.0
+    description: A Helm chart for Kubernetes
+    digest: 2ec58b5157f010a2480556d4966ed5d1c57397c393957645e64c38d19e1ceb13
+    name: minio
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/minio-0.1.0/minio-0.1.0.tgz
+    version: 0.1.0
+  monitoring:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-02-14T17:00:33.170076932Z"
+    dependencies:
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 8.9.0
+    - condition: loki.enabled
+      name: loki
+      repository: https://grafana.github.io/helm-charts
+      version: 6.26.0
+    - alias: mimir
+      condition: mimir.enabled
+      name: mimir-distributed
+      repository: https://grafana.github.io/helm-charts
+      version: ^5.6.0
+    - alias: tempo
+      condition: tempo.enabled
+      name: tempo-distributed
+      repository: https://grafana.github.io/helm-charts
+      version: 1.32.0
+    description: A Helm chart for Kubernetes
+    digest: 3a592fdc23f279e8a041207b00eea3c7426cb5aed3e76e1e440111f29f0b5df3
+    name: monitoring
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/monitoring-0.1.0/monitoring-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-02-14T17:00:33.170088493Z"
