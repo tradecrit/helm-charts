@@ -1,5 +1,7 @@
 alloy:
   enabled: true
+  configReloader:
+    enabled: true
   alloy:
     configMap:
       create: false
