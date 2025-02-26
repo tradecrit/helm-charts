@@ -4,49 +4,149 @@ metadata:
   name: alloy-config
 data:
   config.alloy: |
-    discovery.kubernetes "pods" {
-      role = "pod"
+    otelcol.receiver.otlp "default" {
+        // configures the default grpc endpoint "0.0.0.0:4317"
+        grpc { }
+        // configures the default http/protobuf endpoint "0.0.0.0:4318"
+        http { }
+
+        output {
+            metrics = [otelcol.processor.resourcedetection.default.input]
+            logs    = [otelcol.processor.resourcedetection.default.input]
+            traces  = [otelcol.processor.resourcedetection.default.input]
+        }
     }
 
-    loki.source.kubernetes "pods" {
-      targets    = discovery.kubernetes.pods.targets
-      forward_to = [loki.write.local.receiver]
+    otelcol.processor.resourcedetection "default" {
+        detectors = ["env", "system"] // add "gcp", "ec2", "ecs", "elastic_beanstalk", "eks", "lambda", "azure", "aks", "consul", "heroku"  if you want to use cloud resource detection
+
+        system {
+            hostname_sources = ["os"]
+        }
+
+        output {
+            metrics = [otelcol.processor.transform.drop_unneeded_resource_attributes.input]
+            logs    = [otelcol.processor.transform.drop_unneeded_resource_attributes.input]
+            traces  = [otelcol.processor.transform.drop_unneeded_resource_attributes.input]
+        }
     }
 
-    loki.source.kubernetes "nodes" {
-      targets    = discovery.kubernetes.nodes.targets
-      forward_to = [loki.write.local.receiver]
+    otelcol.processor.transform "drop_unneeded_resource_attributes" {
+        // https://grafana.com/docs/alloy/latest/reference/components/otelcol.processor.transform/
+        error_mode = "ignore"
+
+        trace_statements {
+            context    = "resource"
+            statements = [
+                "delete_key(attributes, \"k8s.pod.start_time\")",
+                "delete_key(attributes, \"os.description\")",
+                "delete_key(attributes, \"os.type\")",
+                "delete_key(attributes, \"process.command_args\")",
+                "delete_key(attributes, \"process.executable.path\")",
+                "delete_key(attributes, \"process.pid\")",
+                "delete_key(attributes, \"process.runtime.description\")",
+                "delete_key(attributes, \"process.runtime.name\")",
+                "delete_key(attributes, \"process.runtime.version\")",
+            ]
+        }
+
+        metric_statements {
+            context    = "resource"
+            statements = [
+                "delete_key(attributes, \"k8s.pod.start_time\")",
+                "delete_key(attributes, \"os.description\")",
+                "delete_key(attributes, \"os.type\")",
+                "delete_key(attributes, \"process.command_args\")",
+                "delete_key(attributes, \"process.executable.path\")",
+                "delete_key(attributes, \"process.pid\")",
+                "delete_key(attributes, \"process.runtime.description\")",
+                "delete_key(attributes, \"process.runtime.name\")",
+                "delete_key(attributes, \"process.runtime.version\")",
+            ]
+        }
+
+        log_statements {
+            context    = "resource"
+            statements = [
+                "delete_key(attributes, \"k8s.pod.start_time\")",
+                "delete_key(attributes, \"os.description\")",
+                "delete_key(attributes, \"os.type\")",
+                "delete_key(attributes, \"process.command_args\")",
+                "delete_key(attributes, \"process.executable.path\")",
+                "delete_key(attributes, \"process.pid\")",
+                "delete_key(attributes, \"process.runtime.description\")",
+                "delete_key(attributes, \"process.runtime.name\")",
+                "delete_key(attributes, \"process.runtime.version\")",
+            ]
+        }
+
+        output {
+            metrics = [otelcol.processor.transform.add_resource_attributes_as_metric_attributes.input]
+            logs    = [otelcol.processor.batch.default.input]
+            traces  = [
+                otelcol.processor.batch.default.input,
+                otelcol.connector.host_info.default.input,
+            ]
+        }
     }
 
-    logging {
-      level  = "info"
-      format = "logfmt"
+    otelcol.connector.host_info "default" {
+        host_identifiers = ["host.name"]
+
+        output {
+            metrics = [otelcol.processor.batch.default.input]
+        }
     }
 
-    discovery.kubernetes "nodes" {
-      role = "node"
+    otelcol.processor.transform "add_resource_attributes_as_metric_attributes" {
+        error_mode = "ignore"
+
+        metric_statements {
+        context    = "datapoint"
+        statements = [
+            "set(attributes[\"deployment.environment\"], resource.attributes[\"deployment.environment\"])",
+            "set(attributes[\"service.version\"], resource.attributes[\"service.version\"])",
+            ]
+        }
+
+        output {
+            metrics = [otelcol.processor.batch.default.input]
+        }
     }
-    discovery.kubernetes "services" {
-      role = "service"
+
+    otelcol.processor.batch "default" {
+        output {
+            metrics = [otelcol.exporter.prometheus.default.input]
+            logs    = [otelcol.exporter.loki.default.input]
+            traces  = [otelcol.exporter.otlp.default.input]
+        }
     }
-    discovery.kubernetes "endpoints" {
-      role = "endpoints"
+
+    otelcol.exporter.prometheus "default" {
+      forward_to = [prometheus.remote_write.mimir.receiver]
     }
-    discovery.kubernetes "endpointslices" {
-      role = "endpointslice"
-    }
-    discovery.kubernetes "ingresses" {
-      role = "ingress"
-    }
-    prometheus.scrape "grafana" {
-      targets = [
-        {"__address__" = "grafana.monitoring.svc:8080"},
-      ]
-      scrape_interval = "15s"
-      forward_to = [prometheus.remote_write.default.receiver]
-    }
-    prometheus.remote_write "default" {
+
+    prometheus.remote_write "mimir" {
       endpoint {
-        url = "http://grafana-mimir-nginx:80/api/v1/push"
+        url = "http://grafana-mimir-nginx.monitoring.svc:80/api/v1/push"
       }
+    }
+
+    otelcol.exporter.loki "default" {
+      forward_to = [loki.write.default.receiver]
+    }
+
+    loki.write "default" {
+      endpoint {
+        url = "http://grafana-loki.monitoring.svc:3100/loki/api/v1/push"
+      }
+    }
+
+    otelcol.exporter.otlp "default" {
+        client {
+            endpoint = "grafana-tempo.monitoring.svc:4317"
+            tls {
+                insecure = true
+            }
+        }
     }
