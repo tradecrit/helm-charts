@@ -9,6 +9,7 @@ data:
           {"__address__" = "grafana:8080", "service_name"="grafana"},
           {"__address__" = "grafana-alloy:12345", "service_name"="alloy"},
           {"__address__" = "grafana-kube-state-metrics:8080" },
+          {"__address__" = "grafana-prometheus-node-exporter:9100" },
         ]
 
       forward_to = [prometheus.remote_write.mimir.receiver]
