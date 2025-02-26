@@ -4,6 +4,16 @@ metadata:
   name: alloy-config
 data:
   config.alloy: |
+    // ADDITIONAL SERVICE CONFIGURATION
+    prometheus.scrape "grafana" {
+      targets = [
+        {"__address__" = "grafana.monitoring.svc:8080"},
+      ]
+      scrape_interval = "15s"
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    // COLLECT CONFIGURATION
     otelcol.receiver.otlp "default" {
         // configures the default grpc endpoint "0.0.0.0:4317"
         grpc { }
