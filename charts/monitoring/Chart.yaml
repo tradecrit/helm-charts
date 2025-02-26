@@ -29,3 +29,6 @@ dependencies:
     condition: alloy.enabled
     version: 0.11.0
     repository: https://grafana.github.io/helm-charts
+  - name: kube-prometheus-stack
+    version: 69.5.*
+    repository: https://prometheus-community.github.io/helm-charts

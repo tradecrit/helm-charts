@@ -1,3 +1,17 @@
+kube-prometheus-stack:
+  crds:
+    enabled: true
+  kube-state-metrics:
+    enabled: true
+  nodeExporter:
+    enabled: true
+  grafana:
+    enabled: false
+  prometheus-windows-exporter:
+    prometheus:
+      monitor:
+        enabled: false
+
 alloy:
   enabled: true
   configReloader:
@@ -9,7 +23,7 @@ alloy:
       key: config.alloy
 
 mimir:
-  enabled: true
+  enabled: false
   mimir:
     structuredConfig:
       common:
@@ -35,6 +49,16 @@ mimir:
         backend: s3
         s3:
           bucket_name: tradecrit-dev-mimir-ruler
+  metaMonitoring:
+    enabled: true
+    dashboards:
+      enabled: true
+    serviceMonitor:
+      enabled: true
+    prometheusRule:
+      enabled: true
+      mimirRules: true
+      mimirAlerts: true
   minio:
     enabled: false
   alertmanager:
@@ -92,7 +116,7 @@ mimir:
         cpu: 20m
 
 loki:
-  enabled: true
+  enabled: false
   loki:
     auth_enabled: false
     commonConfig:
@@ -189,7 +213,7 @@ loki:
     replicas: 0
 
 tempo:
-  enabled: true
+  enabled: false
   minio:
     enabled: false
   ingester:
@@ -231,9 +255,10 @@ tempo:
       enabled: false
 
 grafana:
-  enabled: true
+  enabled: false
   serviceMonitor:
     enabled: true
+    interval: 30s
   service:
     port: 8080
   persistence:
@@ -253,8 +278,9 @@ grafana:
           path: /var/lib/grafana/dashboards/default
   dashboards:
     default:
-      grafana:
-        file: dashboards/grafana.json
+      kubernetes-global:
+        gnetId: 15757
+        datasource: Mimir
   httpRoute:
     enabled: true
     hostnames:

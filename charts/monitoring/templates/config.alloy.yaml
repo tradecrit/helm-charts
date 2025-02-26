@@ -7,36 +7,69 @@ data:
     // ADDITIONAL SERVICE CONFIGURATION
     prometheus.scrape "grafana" {
       targets = [
-        {"__address__" = "grafana:8080"},
+        {
+          "__address__" = "grafana:8080",
+          "application" = "grafana",
+        },
       ]
       scrape_interval = "15s"
       forward_to = [prometheus.remote_write.mimir.receiver]
     }
 
-    // Kubernetes service discovery
-    discovery.kubernetes "k8s_nodes" {
-      role = "node"
+    // Meta monitoring of alloy
+    prometheus.exporter.self "default" {
     }
+
+    prometheus.scrape "metamonitoring" {
+      targets    = prometheus.exporter.self.default.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    logging {
+      level    = "info"
+      format   = "json"
+      write_to = [loki.write.default.receiver]
+    }
+
+    tracing {
+      sampling_fraction = 0.1
+      write_to          = [otelcol.exporter.otlp.default.input]
+    }
+
+    // Enable collection of metrics from the Prometheus Operator service monitors
+    prometheus.operator.servicemonitors "servicemonitors" {
+        forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+    prometheus.operator.podmonitors "podmonitors" {
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+    prometheus.operator.probes "probes" {
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    // Kubernetes discovery
     discovery.kubernetes "k8s_pods" {
       role = "pod"
+    }
+
+    prometheus.scrape "k8s_pods" {
+      targets    = discovery.kubernetes.k8s_pods.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    discovery.kubernetes "k8s_nodes" {
+      role = "node"
     }
 
     prometheus.scrape "k8s_nodes" {
       targets    = discovery.kubernetes.k8s_nodes.targets
       forward_to = [prometheus.remote_write.mimir.receiver]
     }
-    prometheus.scrape "k8s_pods" {
-      targets    = discovery.kubernetes.k8s_pods.targets
-      forward_to = [prometheus.remote_write.mimir.receiver]
-    }
 
     // COLLECT CONFIGURATION
     otelcol.receiver.otlp "default" {
-        // configures the default grpc endpoint "0.0.0.0:4317"
         grpc { }
-        // configures the default http/protobuf endpoint "0.0.0.0:4318"
         http { }
-
         output {
             metrics = [otelcol.processor.resourcedetection.default.input]
             logs    = [otelcol.processor.resourcedetection.default.input]
@@ -45,7 +78,7 @@ data:
     }
 
     otelcol.processor.resourcedetection "default" {
-        detectors = ["env", "system"] // add "gcp", "ec2", "ecs", "elastic_beanstalk", "eks", "lambda", "azure", "aks", "consul", "heroku"  if you want to use cloud resource detection
+        detectors = ["env", "system"]
 
         system {
             hostname_sources = ["os"]
