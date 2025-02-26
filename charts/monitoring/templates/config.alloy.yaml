@@ -7,9 +7,18 @@ data:
     // ADDITIONAL SERVICE CONFIGURATION
     prometheus.scrape "grafana" {
       targets = [
-        {"__address__" = "grafana.monitoring.svc:8080"},
+        {"__address__" = "grafana:8080"},
       ]
       scrape_interval = "15s"
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    // Kubernetes service discovery
+    discovery.kubernetes "k8s_node" {
+      role = "node"
+    }
+    prometheus.scrape "k8s_node" {
+      targets    = discovery.kubernetes.k8s_node.targets
       forward_to = [prometheus.remote_write.mimir.receiver]
     }
 
@@ -125,10 +134,10 @@ data:
     }
 
     otelcol.processor.batch "default" {
-        output {
-            metrics = [otelcol.exporter.prometheus.default.input]
-            logs    = [otelcol.exporter.loki.default.input]
-            traces  = [otelcol.exporter.otlp.default.input]
+      output {
+          metrics = [otelcol.exporter.prometheus.default.input]
+          logs    = [otelcol.exporter.loki.default.input]
+          traces  = [otelcol.exporter.otlp.default.input]
         }
     }
 
