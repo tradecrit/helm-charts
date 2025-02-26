@@ -1,6 +1,8 @@
 kube-prometheus-stack:
   crds:
     enabled: true
+  prometheus:
+    enabled: false
   alertmanager:
     enabled: false
   kube-state-metrics:
@@ -15,7 +17,7 @@ kube-prometheus-stack:
         enabled: false
 
 alloy:
-  enabled: true
+  enabled: false
   configReloader:
     enabled: true
   alloy:
@@ -25,7 +27,7 @@ alloy:
       key: config.alloy
 
 mimir:
-  enabled: false
+  enabled: true
   mimir:
     structuredConfig:
       common:
@@ -53,8 +55,6 @@ mimir:
           bucket_name: tradecrit-dev-mimir-ruler
   metaMonitoring:
     enabled: true
-    dashboards:
-      enabled: true
     serviceMonitor:
       enabled: true
     prometheusRule:
@@ -168,9 +168,7 @@ loki:
   deploymentMode: SingleBinary
   singleBinary:
     autoscaling:
-      enabled: true
-      minReplicas: 1
-      maxReplicas: 3
+      enabled: false
     persistence:
       enabled: true
       size: 20Gi
@@ -257,7 +255,7 @@ tempo:
       enabled: false
 
 grafana:
-  enabled: false
+  enabled: true
   serviceMonitor:
     enabled: true
     interval: 30s
@@ -278,11 +276,11 @@ grafana:
         editable: true
         options:
           path: /var/lib/grafana/dashboards/default
-  dashboards:
-    default:
-      kubernetes-global:
-        gnetId: 15757
-        datasource: Mimir
+  dashboards: {}
+#    default:
+#      kubernetes-global:
+#        gnetId: 15757
+#        datasource: Mimir
   httpRoute:
     enabled: true
     hostnames:
@@ -333,33 +331,33 @@ grafana:
     datasources.yaml:
       apiVersion: 1
       datasources:
-        - name: Loki
-          type: loki
-          access: proxy
-          uid: loki
-          url: http://grafana-loki:3100
-          jsonData:
-            derivedFields:
-              - datasourceUid: tempo
-                matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
-                name: traceId
-                url: '$${__value.raw}'
-        - name: Tempo
-          type: tempo
-          access: proxy
-          uid: tempo
-          default: true
-          url: http://grafana-tempo-query-frontend:3100/
-          jsonData:
-            nodeGraph:
-              enabled: true
-            serviceMap:
-              datasourceUid: mimir
-            tracesToLogs:
-              datasourceUid: loki
-              filterByTraceID: false
-              spanEndTimeShift: "500ms"
-              spanStartTimeShift: "-500ms"
+#        - name: Loki
+#          type: loki
+#          access: proxy
+#          uid: loki
+#          url: http://grafana-loki:3100
+#          jsonData:
+#            derivedFields:
+#              - datasourceUid: tempo
+#                matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
+#                name: traceId
+#                url: '$${__value.raw}'
+#        - name: Tempo
+#          type: tempo
+#          access: proxy
+#          uid: tempo
+#          default: true
+#          url: http://grafana-tempo-query-frontend:3100/
+#          jsonData:
+#            nodeGraph:
+#              enabled: true
+#            serviceMap:
+#              datasourceUid: mimir
+#            tracesToLogs:
+#              datasourceUid: loki
+#              filterByTraceID: false
+#              spanEndTimeShift: "500ms"
+#              spanStartTimeShift: "-500ms"
         - name: Mimir
           type: prometheus
           access: proxy
