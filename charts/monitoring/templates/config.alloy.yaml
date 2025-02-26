@@ -4,12 +4,14 @@ metadata:
   name: alloy-config
 data:
   config.alloy: |
+    // Global configuration, this is required to ingest the default k8s metrics via the node exporter and kube state metrics.
     prometheus.scrape "cluster_targets" {
         targets = [
           {"__address__" = "grafana:8080", "service_name"="grafana"},
           {"__address__" = "grafana-alloy:12345", "service_name"="alloy"},
           {"__address__" = "grafana-kube-state-metrics:8080" },
           {"__address__" = "grafana-prometheus-node-exporter:9100" },
+          {"__address__" = "grafana-mimir-querier:8080",
         ]
 
       forward_to = [prometheus.remote_write.mimir.receiver]
