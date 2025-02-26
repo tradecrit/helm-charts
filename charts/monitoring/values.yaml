@@ -251,9 +251,9 @@ grafana:
         editable: true
         options:
           path: /var/lib/grafana/dashboards/default
-#  dashboards:
-#    custom-dashboard:
-#      file: dashboards/grafana.json
+  dashboards:
+    custom-dashboard:
+      file: dashboards/grafana.json
   httpRoute:
     enabled: true
     hostnames:
