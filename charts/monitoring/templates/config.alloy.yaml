@@ -14,11 +14,19 @@ data:
     }
 
     // Kubernetes service discovery
-    discovery.kubernetes "k8s_node" {
+    discovery.kubernetes "k8s_nodes" {
       role = "node"
     }
-    prometheus.scrape "k8s_node" {
-      targets    = discovery.kubernetes.k8s_node.targets
+    discovery.kubernetes "k8s_pods" {
+      role = "pod"
+    }
+
+    prometheus.scrape "k8s_nodes" {
+      targets    = discovery.kubernetes.k8s_nodes.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+    prometheus.scrape "k8s_pods" {
+      targets    = discovery.kubernetes.k8s_pods.targets
       forward_to = [prometheus.remote_write.mimir.receiver]
     }
 
