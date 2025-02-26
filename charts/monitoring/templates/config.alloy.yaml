@@ -11,7 +11,8 @@ data:
           {"__address__" = "grafana-alloy:12345", "service_name"="alloy"},
           {"__address__" = "grafana-kube-state-metrics:8080" },
           {"__address__" = "grafana-prometheus-node-exporter:9100" },
-          {"__address__" = "grafana-mimir-querier:8080",
+          {"__address__" = "grafana-loki:3100", service_name="loki" },
+          {"__address__" = "grafana-tempo-query-frontend:3100", service_name="tempo" },
         ]
 
       forward_to = [prometheus.remote_write.mimir.receiver]

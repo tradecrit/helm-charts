@@ -118,7 +118,7 @@ mimir:
         cpu: 20m
 
 loki:
-  enabled: false
+  enabled: true
   loki:
     auth_enabled: false
     commonConfig:
@@ -213,7 +213,7 @@ loki:
     replicas: 0
 
 tempo:
-  enabled: false
+  enabled: true
   minio:
     enabled: false
   ingester:
@@ -331,33 +331,33 @@ grafana:
     datasources.yaml:
       apiVersion: 1
       datasources:
-#        - name: Loki
-#          type: loki
-#          access: proxy
-#          uid: loki
-#          url: http://grafana-loki:3100
-#          jsonData:
-#            derivedFields:
-#              - datasourceUid: tempo
-#                matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
-#                name: traceId
-#                url: '$${__value.raw}'
-#        - name: Tempo
-#          type: tempo
-#          access: proxy
-#          uid: tempo
-#          default: true
-#          url: http://grafana-tempo-query-frontend:3100/
-#          jsonData:
-#            nodeGraph:
-#              enabled: true
-#            serviceMap:
-#              datasourceUid: mimir
-#            tracesToLogs:
-#              datasourceUid: loki
-#              filterByTraceID: false
-#              spanEndTimeShift: "500ms"
-#              spanStartTimeShift: "-500ms"
+        - name: Loki
+          type: loki
+          access: proxy
+          uid: loki
+          url: http://grafana-loki:3100
+          jsonData:
+            derivedFields:
+              - datasourceUid: tempo
+                matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
+                name: traceId
+                url: '$${__value.raw}'
+        - name: Tempo
+          type: tempo
+          access: proxy
+          uid: tempo
+          default: true
+          url: http://grafana-tempo-query-frontend:3100/
+          jsonData:
+            nodeGraph:
+              enabled: true
+            serviceMap:
+              datasourceUid: mimir
+            tracesToLogs:
+              datasourceUid: loki
+              filterByTraceID: false
+              spanEndTimeShift: "500ms"
+              spanStartTimeShift: "-500ms"
         - name: Mimir
           type: prometheus
           access: proxy
