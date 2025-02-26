@@ -4,7 +4,17 @@ metadata:
   name: alloy-config
 data:
   config.alloy: |
-    // COLLECT CONFIGURATION
+    prometheus.scrape "cluster_targets" {
+        targets = [
+          {"__address__" = "grafana:8080", "service_name"="grafana"},
+          {"__address__" = "grafana-alloy:12345", "service_name"="alloy"},
+          {"__address__" = "grafana-kube-state-metrics:8080" },
+        ]
+
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    // OTEL CONFIGURATION
     otelcol.receiver.otlp "default" {
         grpc { }
         http { }
@@ -124,27 +134,28 @@ data:
       forward_to = [prometheus.remote_write.mimir.receiver]
     }
 
+    otelcol.exporter.loki "default" {
+      forward_to = [loki.write.default.receiver]
+    }
+
+    // Tells Alloy where to export via the batch processor all logs/traces/metrics.
+    otelcol.exporter.otlp "default" {
+      client {
+          endpoint = "grafana-tempo.monitoring.svc:4317"
+          tls {
+              insecure = true
+          }
+        }
+    }
+
     prometheus.remote_write "mimir" {
       endpoint {
         url = "http://grafana-mimir-nginx.monitoring.svc:80/api/v1/push"
       }
     }
 
-    otelcol.exporter.loki "default" {
-      forward_to = [loki.write.default.receiver]
-    }
-
     loki.write "default" {
       endpoint {
         url = "http://grafana-loki.monitoring.svc:3100/loki/api/v1/push"
       }
-    }
-
-    otelcol.exporter.otlp "default" {
-        client {
-            endpoint = "grafana-tempo.monitoring.svc:4317"
-            tls {
-                insecure = true
-            }
-        }
     }

@@ -17,7 +17,7 @@ kube-prometheus-stack:
         enabled: false
 
 alloy:
-  enabled: false
+  enabled: true
   configReloader:
     enabled: true
   alloy:
