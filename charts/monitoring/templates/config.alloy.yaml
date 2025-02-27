@@ -94,11 +94,11 @@ data:
     // OTEL CONFIGURATION
     otelcol.receiver.otlp "default" {
       grpc {
-        endpoint = "127.0.0.1:4317"
+        endpoint = "0.0.0.0:4317"
       }
 
-        http {
-        endpoint = "127.0.0.1:4318"
+      http {
+        endpoint = "0.0.0.0:4318"
       }
 
       output {
@@ -182,22 +182,22 @@ data:
     }
 
     otelcol.connector.host_info "default" {
-        host_identifiers = ["host.name"]
+      host_identifiers = ["host.name"]
 
-        output {
-            metrics = [otelcol.processor.batch.default.input]
-        }
+      output {
+          metrics = [otelcol.processor.batch.default.input]
+      }
     }
 
     otelcol.processor.transform "add_resource_attributes_as_metric_attributes" {
         error_mode = "ignore"
 
         metric_statements {
-        context    = "datapoint"
-        statements = [
+          context    = "datapoint"
+          statements = [
             "set(attributes[\"deployment.environment\"], resource.attributes[\"deployment.environment\"])",
             "set(attributes[\"service.version\"], resource.attributes[\"service.version\"])",
-            ]
+          ]
         }
 
         output {

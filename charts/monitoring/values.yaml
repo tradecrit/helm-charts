@@ -25,6 +25,15 @@ alloy:
       create: false
       name: alloy-config
       key: config.alloy
+    extraPorts:
+      - name: grpc
+        port: 4137
+        targetPort: 4137
+        protocol: TCP
+      - name: http
+        port: 4138
+        targetPort: 4138
+        protocol: TCP
 
 mimir:
   enabled: true
