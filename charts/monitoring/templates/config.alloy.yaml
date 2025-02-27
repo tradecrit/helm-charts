@@ -23,7 +23,6 @@ data:
       forward_to = [
         prometheus.remote_write.mimir.receiver,
       ]
-
       rule {
         action       = "replace"
         target_label = "cluster"
@@ -94,13 +93,19 @@ data:
 
     // OTEL CONFIGURATION
     otelcol.receiver.otlp "default" {
-        grpc { }
-        http { }
-        output {
-            metrics = [otelcol.processor.resourcedetection.default.input]
-            logs    = [otelcol.processor.resourcedetection.default.input]
-            traces  = [otelcol.processor.resourcedetection.default.input]
-        }
+      grpc {
+        endpoint = "127.0.0.1:4317"
+      }
+
+        http {
+        endpoint = "127.0.0.1:4318"
+      }
+
+      output {
+          metrics = [otelcol.processor.resourcedetection.default.input]
+          logs    = [otelcol.processor.resourcedetection.default.input]
+          traces  = [otelcol.processor.resourcedetection.default.input]
+      }
     }
 
     otelcol.processor.resourcedetection "default" {
