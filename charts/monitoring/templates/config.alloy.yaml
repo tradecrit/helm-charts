@@ -9,12 +9,86 @@ data:
         targets = [
           {"__address__" = "grafana:8080", "service_name"="grafana"},
           {"__address__" = "grafana-alloy:12345", "service_name"="alloy"},
-          {"__address__" = "grafana-kube-state-metrics:8080" },
+          {"__address__" = "grafana-kube-state-metrics:8080", "cluster"="development" },
           {"__address__" = "grafana-prometheus-node-exporter:9100" },
           {"__address__" = "grafana-loki:3100", service_name="loki" },
           {"__address__" = "grafana-tempo-query-frontend:3100", service_name="tempo" },
         ]
+      honor_labels = true
+      scrape_interval = "15s"
+      forward_to = [prometheus.relabel.add_labels.receiver]
+    }
 
+    prometheus.relabel "add_labels" {
+      forward_to = [
+        prometheus.remote_write.mimir.receiver,
+      ]
+
+      rule {
+        action       = "replace"
+        target_label = "cluster"
+        replacement  = "development"
+      }
+    }
+
+    // Kubernetes
+    discovery.kubernetes "pod" {
+        role = "pod"
+    }
+    prometheus.scrape "pod" {
+      honor_labels = true
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.pod.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    discovery.kubernetes "service" {
+        role = "service"
+    }
+    prometheus.scrape "service" {
+      honor_labels = true
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.service.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    discovery.kubernetes "node" {
+        role = "node"
+    }
+    prometheus.scrape "node" {
+      honor_labels = true
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.node.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    discovery.kubernetes "endpoints" {
+        role = "endpoints"
+    }
+    prometheus.scrape "endpoints" {
+      honor_labels = true
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.endpoints.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    discovery.kubernetes "endpointslice" {
+      role = "endpointslice"
+    }
+    prometheus.scrape "endpointslice" {
+      honor_labels = true
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.endpointslice.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+    }
+
+    discovery.kubernetes "ingress" {
+      role = "ingress"
+    }
+    prometheus.scrape "ingress" {
+      honor_labels = true
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.ingress.targets
       forward_to = [prometheus.remote_write.mimir.receiver]
     }
 
