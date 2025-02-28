@@ -56,16 +56,24 @@ alloy:
         protocol: TCP
 
 loki:
-  enabled: false
+  enabled: true
   loki:
     auth_enabled: false
     commonConfig:
       replication_factor: 1
+    storage: {}
+    storage_config:
+      tsdb_shipper:
+        active_index_directory: /loki/index
+        cache_location: /loki/cache
+        shared_store: filesystem
+      filesystem:
+        directory: /loki/chunks
     schemaConfig:
       configs:
         - from: 2024-04-01
           store: tsdb
-          object_store: s3
+          object_store: filesystem
           schema: v13
           index:
             prefix: loki_index_
@@ -84,25 +92,6 @@ loki:
       enabled: true
     querier:
       max_concurrent: 2
-    storage:
-      type: s3
-      bucketNames:
-        chunks: tradecrit-dev-loki-chunks
-        ruler: tradecrit-dev-loki-ruler
-        admin: tradecrit-dev-loki-admin
-      s3:
-        # s3 URL can be used to specify the endpoint, access key, secret key, and bucket name this works well for S3 compatible storage or if you are hosting Loki on-premises and want to use S3 as the storage backend. Either use the s3 URL or the individual fields below (AWS endpoint, region, secret).
-        endpoint: sfo2.digitaloceanspaces.com
-        # AWS secret access key
-        secretAccessKey: ""
-        # AWS access key ID
-        accessKeyId: ""
-        # AWS signature version (e.g., v2 or v4)
-        signatureVersion: v4
-        # Forces the path style for S3 (true/false)
-        s3ForcePathStyle: true
-        # Allows insecure (HTTP) connections (true/false)
-        insecure: false
   deploymentMode: SingleBinary
   singleBinary:
     autoscaling:
