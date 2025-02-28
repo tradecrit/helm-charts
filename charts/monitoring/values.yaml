@@ -3,8 +3,28 @@ kube-prometheus-stack:
     enabled: true
   prometheus:
     enabled: true
+    prometheusSpec:
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: default
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 50Gi
   alertmanager:
     enabled: true
+    alertmanagerSpec:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: default
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Gi
   kube-state-metrics:
     enabled: true
   nodeExporter:
@@ -131,7 +151,7 @@ loki:
     replicas: 0
 
 tempo:
-  enabled: true
+  enabled: false
   minio:
     enabled: false
   ingester:
