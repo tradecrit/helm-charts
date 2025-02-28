@@ -12,7 +12,7 @@ data:
           {"__address__" = "grafana-kube-state-metrics:8080", "cluster"="development" },
           {"__address__" = "grafana-prometheus-node-exporter:9100" },
           {"__address__" = "grafana-loki:3100", service_name="loki" },
-          {"__address__" = "grafana-tempo-query-frontend:3100", service_name="tempo" },
+          {"__address__" = "grafana-tempo:3100", service_name="tempo" },
         ]
       honor_labels = true
       scrape_interval = "15s"

@@ -39,7 +39,7 @@ kube-prometheus-stack:
         enabled: false
 
 alloy:
-  enabled: false
+  enabled: true
   configReloader:
     enabled: true
   alloy:
@@ -146,9 +146,8 @@ tempo:
     size: 20Gi
     enableStatefulSetAutoDeletePVC: true
 
-
 grafana:
-  enabled: false
+  enabled: true
   serviceMonitor:
     enabled: true
     interval: 30s
@@ -236,22 +235,22 @@ grafana:
           access: proxy
           uid: tempo
           default: true
-          url: http://grafana-tempo-query-frontend:3100/
+          url: http://grafana-tempo:3100
           jsonData:
             nodeGraph:
               enabled: true
             serviceMap:
-              datasourceUid: mimir
+              datasourceUid: prometheus
             tracesToLogs:
               datasourceUid: loki
               filterByTraceID: false
               spanEndTimeShift: "500ms"
               spanStartTimeShift: "-500ms"
-        - name: Mimir
+        - name: Prometheus
           type: prometheus
           access: proxy
-          uid: mimir
-          url: http://grafana-mimir-nginx/prometheus
+          uid: prometheus
+          url: http://grafana-kube-prometheus-st-prometheus:9090
           jsonData:
             exemplarTraceIdDestinations:
               - datasourceUid: tempo
