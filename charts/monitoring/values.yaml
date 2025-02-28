@@ -2,9 +2,9 @@ kube-prometheus-stack:
   crds:
     enabled: true
   prometheus:
-    enabled: false
+    enabled: true
   alertmanager:
-    enabled: false
+    enabled: true
   kube-state-metrics:
     enabled: true
   nodeExporter:
@@ -36,7 +36,7 @@ alloy:
         protocol: TCP
 
 loki:
-  enabled: true
+  enabled: false
   loki:
     auth_enabled: false
     commonConfig:
@@ -173,7 +173,7 @@ tempo:
       enabled: false
 
 grafana:
-  enabled: true
+  enabled: false
   serviceMonitor:
     enabled: true
     interval: 30s
@@ -195,10 +195,6 @@ grafana:
         options:
           path: /var/lib/grafana/dashboards/default
   dashboards: {}
-#    default:
-#      kubernetes-global:
-#        gnetId: 15757
-#        datasource: Mimir
   httpRoute:
     enabled: true
     hostnames:
