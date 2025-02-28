@@ -15,11 +15,11 @@ dependencies:
     condition: loki.enabled
     version: 6.27.*
     repository: https://grafana.github.io/helm-charts
-#  - name: tempo-distributed
-#    alias: tempo
-#    condition: tempo.enabled
-#    repository: "https://grafana.github.io/helm-charts"
-#    version: 1.32.*
+  - name: tempo
+    alias: tempo
+    condition: tempo.enabled
+    repository: "https://grafana.github.io/helm-charts"
+    version: 1.18.*
   - name: alloy
     condition: alloy.enabled
     version: 0.12.*

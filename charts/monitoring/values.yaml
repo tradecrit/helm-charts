@@ -136,46 +136,16 @@ loki:
     replicas: 0
 
 tempo:
-  enabled: false
-  minio:
-    enabled: false
-  ingester:
-    replicas: 1
-    config:
-      replication_factor: 1
-    resources:
-      requests:
-        cpu: 20m
-  storage:
-    trace:
-      backend: s3
-      s3:
-        bucket: tradecrit-dev-tempo-traces
-        endpoint: sfo2.digitaloceanspaces.com
-        access_key: ""
-        secret_key: ""
-        insecure: false
-        forcepathstyle: true
-  distributor:
-    replicas: 1
-    config:
-      log_received_spans:
-        enabled: true
-      log_discarded_spans:
-        enabled: true
-  traces:
-    otlp:
-      grpc:
-        enabled: true
-      http:
-        enabled: true
-    zipkin:
-      enabled: false
-    jaeger:
-      thriftHttp:
-        enabled: false
-    opencensus:
-      enabled: false
+  enabled: true
+  tempo:
+    receivers:
+      jaeger: {}
+      opencensus: {}
+  persistence:
+    enabled: true
+    size: 20Gi
+    enableStatefulSetAutoDeletePVC: true
+
 
 grafana:
   enabled: false
