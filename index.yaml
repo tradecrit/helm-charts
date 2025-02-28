@@ -42,6 +42,28 @@ entries:
   monitoring:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2025-02-28T19:55:54.395349848Z"
+    dependencies:
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 8.10.*
+    - condition: alloy.enabled
+      name: alloy
+      repository: https://grafana.github.io/helm-charts
+      version: 0.12.*
+    - name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 69.5.*
+    description: A Helm chart for Kubernetes
+    digest: 9af6629721c6ecaa8890ff34ab001f90a47f603a24e5c9f4e5cf0645c8fedfe9
+    name: monitoring
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/monitoring-0.1.2/monitoring-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2025-02-28T19:23:30.514433187Z"
     dependencies:
     - condition: grafana.enabled
@@ -100,4 +122,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/monitoring-0.1.0/monitoring-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-28T19:23:30.514446702Z"
+generated: "2025-02-28T19:55:54.395371689Z"
