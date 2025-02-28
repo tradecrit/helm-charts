@@ -7,7 +7,7 @@ kube-prometheus-stack:
       storageSpec:
         volumeClaimTemplate:
           spec:
-            storageClassName: default
+            storageClassName: microk8s-hostpath
             accessModes:
               - ReadWriteOnce
             resources:
@@ -19,7 +19,7 @@ kube-prometheus-stack:
       storage:
         volumeClaimTemplate:
           spec:
-            storageClassName: default
+            storageClassName: microk8s-hostpath
             accessModes:
               - ReadWriteOnce
             resources:
@@ -37,7 +37,7 @@ kube-prometheus-stack:
         enabled: false
 
 alloy:
-  enabled: true
+  enabled: false
   configReloader:
     enabled: true
   alloy:
