@@ -42,6 +42,37 @@ entries:
   monitoring:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2025-02-28T19:23:30.514433187Z"
+    dependencies:
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 8.10.*
+    - condition: loki.enabled
+      name: loki
+      repository: https://grafana.github.io/helm-charts
+      version: 6.26.*
+    - alias: tempo
+      condition: tempo.enabled
+      name: tempo-distributed
+      repository: https://grafana.github.io/helm-charts
+      version: 1.32.*
+    - condition: alloy.enabled
+      name: alloy
+      repository: https://grafana.github.io/helm-charts
+      version: 0.12.*
+    - name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 69.5.*
+    description: A Helm chart for Kubernetes
+    digest: badb86098f672f0b20ff8764822ee812d1662e613c58ee93a852d9ca08825afe
+    name: monitoring
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/monitoring-0.1.1/monitoring-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2025-02-14T17:00:33.170076932Z"
     dependencies:
     - condition: grafana.enabled
@@ -69,4 +100,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/monitoring-0.1.0/monitoring-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-14T17:00:33.170088493Z"
+generated: "2025-02-28T19:23:30.514446702Z"
