@@ -5,6 +5,16 @@ metadata:
   namespace: monitoring
 data:
   config.alloy: |
+    discovery.kubernetes "node" {
+      role = "node"
+    }
+    
+    prometheus.scrape "node" {
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.node.targets
+      forward_to = [prometheus.remote_write.default.receiver]
+    }
+
     discovery.kubernetes "pod" {
       role = "pod"
     }
