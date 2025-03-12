@@ -5,6 +5,26 @@ metadata:
   namespace: monitoring
 data:
   config.alloy: |
+    discovery.kubernetes "pod" {
+      role = "pod"
+    }
+
+    prometheus.scrape "pod" {
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.pod.targets
+      forward_to = [prometheus.remote_write.default.receiver]
+    }
+
+    discovery.kubernetes "service" {
+      role = "service"
+    }
+
+    prometheus.scrape "service" {
+      scrape_interval = "15s"
+      targets    = discovery.kubernetes.service.targets
+      forward_to = [prometheus.remote_write.default.receiver]
+    }
+
     // otel receiver -> batch processor -> exporter -> endpoint
     otelcol.receiver.otlp "default" {
       grpc {
