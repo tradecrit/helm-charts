@@ -8,7 +8,7 @@ data:
     discovery.kubernetes "node" {
       role = "node"
     }
-    
+
     prometheus.scrape "node" {
       scrape_interval = "15s"
       targets    = discovery.kubernetes.node.targets
