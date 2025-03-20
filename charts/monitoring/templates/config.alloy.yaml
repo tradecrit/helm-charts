@@ -71,19 +71,19 @@ data:
     // OTEL Endpoints
     prometheus.remote_write "default" {
       endpoint {
-        url = "http://grafana-kube-prometheus-st-prometheus.svc:9090/api/v1/write"
+        url = "http://grafana-kube-prometheus-st-prometheus:9090/api/v1/write"
       }
     }
 
     loki.write "default" {
       endpoint {
-        url = "http://grafana-loki.monitoring.svc:3100/loki/api/v1/push"
+        url = "http://grafana-loki:3100/loki/api/v1/push"
       }
     }
 
     otelcol.exporter.otlp "default" {
       client {
-          endpoint = "grafana-tempo.monitoring.svc:4317"
+          endpoint = "grafana-tempo:4317"
           tls {
               insecure = true
           }
