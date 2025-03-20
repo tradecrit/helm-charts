@@ -236,6 +236,10 @@ grafana:
               filterByTraceID: false
               spanEndTimeShift: "500ms"
               spanStartTimeShift: "-500ms"
+            tracesToMetrics:
+              datasourceUid: prometheus
+              spanEndTimeShift: "500ms"
+              spanStartTimeShift: "-500ms"
         - name: Prometheus
           type: prometheus
           access: proxy

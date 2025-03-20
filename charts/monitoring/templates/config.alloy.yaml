@@ -55,17 +55,13 @@ data:
     otelcol.processor.batch "default" {
       output {
         metrics = [otelcol.exporter.prometheus.default.input]
-        logs    = [otelcol.exporter.loki.default.input]
-        traces  = [otelcol.exporter.otlp.default.input]
+        logs    = [otelcol.exporter.otlphttp.loki.input]
+        traces  = [otelcol.exporter.otlp.tempo.input]
       }
     }
 
     otelcol.exporter.prometheus "default" {
       forward_to = [prometheus.remote_write.default.receiver]
-    }
-
-    otelcol.exporter.loki "default" {
-      forward_to = [loki.write.default.receiver]
     }
 
     // OTEL Endpoints
@@ -75,13 +71,13 @@ data:
       }
     }
 
-    loki.write "default" {
-      endpoint {
-        url = "http://grafana-loki:3100/loki/api/v1/push"
+    otelcol.exporter.otlphttp "loki" {
+      client {
+        endpoint = "http://grafana-loki:3100/otlp"
       }
     }
 
-    otelcol.exporter.otlp "default" {
+    otelcol.exporter.otlp "tempo" {
       client {
           endpoint = "grafana-tempo:4317"
           tls {
