@@ -9,21 +9,21 @@ appVersion: "1.16.0"
 dependencies:
   - name: grafana
     condition: grafana.enabled
-    version: 8.10.*
+    version: 8.10.4
     repository: https://grafana.github.io/helm-charts
   - name: loki
     condition: loki.enabled
-    version: 6.27.*
+    version: 6.28.0
     repository: https://grafana.github.io/helm-charts
   - name: tempo
     alias: tempo
     condition: tempo.enabled
     repository: "https://grafana.github.io/helm-charts"
-    version: 1.18.*
+    version: 1.18.3
   - name: alloy
     condition: alloy.enabled
-    version: 0.12.*
+    version: 0.12.5
     repository: https://grafana.github.io/helm-charts
   - name: kube-prometheus-stack
-    version: 69.5.*
+    version: 70.2.0
     repository: https://prometheus-community.github.io/helm-charts
