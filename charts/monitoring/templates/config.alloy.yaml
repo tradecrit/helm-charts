@@ -70,7 +70,7 @@ data:
 
     prometheus.remote_write "default" {
       endpoint {
-        url = "http://grafana-kube-prometheus-st-prometheus.svc:9090/api/v1/write"
+        url = "http://grafana-kube-prometheus-st-prometheus.monitoring.svc:9090/api/v1/write"
       }
     }
 
