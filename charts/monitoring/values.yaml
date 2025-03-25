@@ -227,19 +227,43 @@ grafana:
           default: true
           url: http://grafana-tempo:3100
           jsonData:
+            serviceMap:
+              datasourceUid: 'prometheus'
             nodeGraph:
               enabled: true
-            serviceMap:
-              datasourceUid: prometheus
-            tracesToLogs:
-              datasourceUid: loki
+            search:
+              hide: false
+            traceQuery:
+              timeShiftEnabled: true
+              spanStartTimeShift: '-1h'
+              spanEndTimeShift: '1h'
+            spanBar:
+              type: 'Tag'
+              tag: 'http.path'
+            streamingEnabled:
+              search: true
+            tracesToLogsV2:
+              # Field with an internal link pointing to a logs data source in Grafana.
+              # datasourceUid value must match the uid value of the logs data source.
+              datasourceUid: 'loki'
+              spanStartTimeShift: '-1h'
+              spanEndTimeShift: '1h'
+              tags: ['job', 'instance', 'pod', 'namespace']
               filterByTraceID: false
-              spanEndTimeShift: "500ms"
-              spanStartTimeShift: "-500ms"
+              filterBySpanID: false
+              customQuery: true
+              query: 'method="$${__span.tags.method}"'
             tracesToMetrics:
-              datasourceUid: prometheus
-              spanEndTimeShift: "500ms"
-              spanStartTimeShift: "-500ms"
+              datasourceUid: 'prometheus'
+              spanStartTimeShift: '-1h'
+              spanEndTimeShift: '1h'
+              tags: [{ key: 'service.name', value: 'service' }, { key: 'job' }]
+#            tracesToProfiles:
+#              datasourceUid: 'grafana-pyroscope-datasource'
+#              tags: ['job', 'instance', 'pod', 'namespace']
+#              profileTypeId: 'process_cpu:cpu:nanoseconds:cpu:nanoseconds'
+#              customQuery: true
+#              query: 'method="$${__span.tags.method}"'
         - name: Prometheus
           type: prometheus
           access: proxy
