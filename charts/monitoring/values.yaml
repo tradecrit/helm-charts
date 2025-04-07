@@ -7,7 +7,7 @@ kube-prometheus-stack:
   prometheus:
     enabled: true
     prometheusSpec:
-      enableRemoteWriteReceiver: true
+      enableRemoteWriteReceiver: false
       storageSpec:
         volumeClaimTemplate:
           spec:
@@ -18,7 +18,7 @@ kube-prometheus-stack:
               requests:
                 storage: 50Gi
   alertmanager:
-    enabled: true
+    enabled: false
     alertmanagerSpec:
       storage:
         volumeClaimTemplate:
@@ -30,7 +30,7 @@ kube-prometheus-stack:
               requests:
                 storage: 10Gi
   kube-state-metrics:
-    enabled: true
+    enabled: false
   nodeExporter:
     enabled: true
   grafana:
