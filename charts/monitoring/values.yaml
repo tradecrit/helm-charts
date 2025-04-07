@@ -1,6 +1,9 @@
 kube-prometheus-stack:
   crds:
     enabled: true
+    upgradeJob:
+      enabled: true
+      forceConflicts: true
   prometheus:
     enabled: true
     prometheusSpec:
