@@ -1,5 +1,17 @@
 replicaCount: 1
 
+redis:
+  enabled: false
+  persistence:
+    enabled: false
+  replica:
+    replicaCount: 0
+  master:
+    persistence:
+      enabled: false
+  auth:
+    enabled: false
+
 httpRoute:
   enabled: false
   gatewayNamespace: istio-ingress
