@@ -15,6 +15,22 @@ entries:
   microservice:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2025-04-11T14:14:25.908569644Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.11.5
+    description: A Helm chart for Kubernetes
+    digest: 407720d02d0e93cc2c01e5c81f96f7907ac25e39b7254552e9171ad1b443abbe
+    icon: https://bitnami.com/assets/stacks/helm/logos/helm.svg
+    name: microservice
+    type: application
+    urls:
+    - https://github.com/tradecrit/helm-charts/releases/download/microservice-0.1.31/microservice-0.1.31.tgz
+    version: 0.1.31
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2025-04-08T14:22:40.679900469Z"
     description: A Helm chart for Kubernetes
     digest: 5b68a4ed62c71892892623b873548ed9bc248236dacdde63f6a7dafe3feb928b
@@ -423,4 +439,4 @@ entries:
     urls:
     - https://github.com/tradecrit/helm-charts/releases/download/monitoring-0.1.0/monitoring-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-08T14:22:40.67994376Z"
+generated: "2025-04-11T14:14:25.908604419Z"
